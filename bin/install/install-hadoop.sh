@@ -1,8 +1,8 @@
 
-# Resolve cloud-devel-env.sh
+# Resolve env.sh
 INSTALL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="$( dirname "${INSTALL_DIR}" )"
-source "${BIN_DIR}/cloud-devel-env.sh"
+source "${BIN_DIR}/env.sh"
 
 # Make sure JDK already installed
 if [ ! -f "${CLOUD_DEVEL_HOME}/${CD_JAVA_SYMLINK}/bin/java" ] ; then
@@ -13,11 +13,9 @@ fi
 [ -z "${CD_HADOOP_BASEDIR}" ] && fatal "CD_HADOOP_BASEDIR is not set. Is Hadoop not registered as a service?"
 [ -z "${CD_HADOOP_DIST}" ] && fatal "CD_HADOOP_DIST is not set. Is Hadoop not registered as a service?"
 [ -z "${CD_HADOOP_SYMLINK}" ] && fatal "CD_HADOOP_SYMLINK is not set. Is Hadoop not registered as a service?"
-if [ -d "${CLOUD_DEVEL_HOME}/${CD_HADOOP_BASEDIR}" ] ; then
-   warn "Hadoop directory already exists: '${CLOUD_DEVEL_HOME}/${CD_HADOOP_BASEDIR}'"
-   info "Nothing to do"
-   exit 1
-fi
+
+hadoopIsInstalled && info "Hadoop is already installed" && exit 1
+
 [ -f "${INSTALL_DIR}/tarballs/${CD_HADOOP_DIST}" ] || fatal "Hadoop tarball not found"   
 
 # Ok to extract, set symlink, and verify...

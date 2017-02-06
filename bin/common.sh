@@ -22,10 +22,9 @@ function register() {
    servicename="$1"
    servicescript="${CLOUD_DEVEL_HOME}/bin/services/${servicename}.sh"
    #
-   # Here we create & maintain a simple registry of service names (all lowercase
-   # by convention), so that services are easily pluggable, and so that the services
-   # can be manipulated programatically without having to hardcode their actual names
-   # in scripts
+   # Here we create & maintain a simple registry of service names, so that services 
+   # are easily pluggable, and so that the services can be manipulated programatically 
+   # without having to hardcode their actual names in scripts
    #
    # The service contract requires the following:
    #
@@ -149,7 +148,7 @@ function stopAll() {
    services=(${CLOUD_DEVEL_SERVICES})
    # Loop in reverse order for stopping services
    # In other words, order of registration matters.
-   # ie, we don't want to stop Hadoop *before* Accumulo.
+   # e.g., we don't want to stop Hadoop *before* Accumulo.
    for (( idx=${#services[@]}-1 ; idx>=0 ; idx-- )) ; do
       eval "${services[idx]}Stop"
    done
@@ -169,9 +168,7 @@ function installAll() {
 }
 
 function uninstallAll() {
-   # Uninstalls all registered services. Here we invoke a known script,
-   # because it's expected that uninstallation (like installation) could
-   # be arbitrarily complicated...
+   # Uninstalls all registered services. 
    if servicesAreRunning ; then
       echo "Stop running services before uninstalling!"
       statusAll
@@ -179,5 +176,4 @@ function uninstallAll() {
    fi
    ${CLOUD_DEVEL_HOME}/bin/install/uninstall-all.sh
 }
-
 

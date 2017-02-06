@@ -20,7 +20,7 @@ BIN_DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Portability of the environment is achieved by making the simple assumption 
 # that all installation directories are oriented under CLOUD_DEVEL_HOME, and by
 # making the assumption that all services will run as the same user. Obviously, 
-# that makes this a real bad choice for anything like production use, but that's
+# that makes this a bad choice for anything like production use, but that's
 # not the intended purpose. The purpose here is to make your development and 
 # prototyping workflow a lot less painful. That is all.
 #
@@ -28,7 +28,7 @@ BIN_DIR="$( cd -P "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # trivial to create multiple distinct environments on a single host, if needed 
 # (or to version-control your one working environment with Git for that matter). 
 # Switching between environments is a simple matter of changing which 
-# cloud-devel-env.sh is being sourced in ~/.bashrc
+# env.sh is being sourced within ~/.bashrc
 #
 ###############################################################################
 
@@ -46,7 +46,7 @@ source "${BIN_DIR}/common.sh"
 # BEGIN SERVICE REGISTRATION  ###########################################################
 
 # Your services are made pluggable by following a few simple naming conventions with your
-# scripts and functions. See 'registerService' and other functions in bin/common.sh
+# scripts and functions. See 'register' and other functions in bin/common.sh
 # for details.
 
 # You can add/remove lines below to affect which services are available in this 

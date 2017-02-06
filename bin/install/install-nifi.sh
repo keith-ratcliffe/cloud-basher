@@ -1,17 +1,14 @@
 
-# Resolve cloud-devel-env.sh
+# Resolve env.sh
 INSTALL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="$( dirname "${INSTALL_DIR}" )"
-source "${BIN_DIR}/cloud-devel-env.sh"
+source "${BIN_DIR}/env.sh"
 
 [ -z "${CD_NIFI_BASEDIR}" ] && fatal "CD_NIFI_BASEDIR is not set. Is NiFi not registered as a service?"
 [ -z "${CD_NIFI_DIST}" ] && fatal "CD_NIFI_DIST is not set. Is NiFi not registered as a service?"
 [ -z "${CD_NIFI_SYMLINK}" ] && fatal "CD_NIFI_SYMLINK is not set. Is NiFi not registered as a service?"
 
-if [ -d "${CLOUD_DEVEL_HOME}/${CD_NIFI_SYMLINK}/bin" ] ; then
-   info "NiFi is already installed"
-   exit 0
-fi
+nifiIsInstalled && info "NiFi is already installed" && exit 1
 
 [ ! -f "${INSTALL_DIR}/tarballs/${CD_NIFI_DIST}" ] && fatal "NiFi tarball not found"   
 

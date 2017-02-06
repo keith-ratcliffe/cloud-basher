@@ -1,4 +1,4 @@
-# Sourced by cloud-devel-env.sh
+# Sourced by env.sh
 
 # Zookeeper config
 CD_ZOOKEEPER_DIST_URI="http://apache.org/dist/zookeeper/zookeeper-3.4.6/zookeeper-3.4.6.tar.gz"
@@ -113,9 +113,13 @@ function accumuloInstall() {
     ${CLOUD_DEVEL_HOME}/bin/install/install-accumulo.sh
 }
 
+function zookeeperIsInstalled() {
+    [ ! -d "${CLOUD_DEVEL_HOME}/${CD_ZOOKEEPER_SYMLINK}/bin" ] && return 1
+    return 0
+}
+
 function accumuloIsInstalled() {
     [ ! -d "${CLOUD_DEVEL_HOME}/${CD_ACCUMULO_SYMLINK}/bin" ] && return 1
-    [ ! -d "${CLOUD_DEVEL_HOME}/${CD_ZOOKEEPER_SYMLINK}/bin" ] && return 1
     return 0
 }
 

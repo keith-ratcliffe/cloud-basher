@@ -1,4 +1,4 @@
-# Sourced by cloud-devel-env.sh
+# Sourced by env.sh
 
 CD_HADOOP_DIST_URI="http://archive-primary.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.9.1.tar.gz" # Download URI
 CD_HADOOP_DIST="$( downloadTarball "${CD_HADOOP_DIST_URI}" && echo "${tarball}" )"     # Tarball filename (dynamic)

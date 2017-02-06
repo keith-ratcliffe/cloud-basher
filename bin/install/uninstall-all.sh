@@ -1,8 +1,8 @@
 
-# Resolve cloud-devel-env.sh
+# Resolve env.sh
 INSTALL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="$( dirname "${INSTALL_DIR}" )"
-source "${BIN_DIR}/cloud-devel-env.sh"
+source "${BIN_DIR}/env.sh"
 
 servicesAreRunning && \
 error "Stop services before uninstalling them" && \

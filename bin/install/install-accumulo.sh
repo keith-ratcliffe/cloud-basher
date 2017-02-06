@@ -1,8 +1,9 @@
 
-# Resolve cloud-devel-env.sh
+# Resolve env.sh
 INSTALL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="$( dirname "${INSTALL_DIR}" )"
-source "${BIN_DIR}/cloud-devel-env.sh"
+source "${BIN_DIR}/env.sh"
+
 
 # Make sure JDK already installed
 if [ ! -f "${CLOUD_DEVEL_HOME}/${CD_JAVA_SYMLINK}/bin/java" ] ; then
@@ -19,20 +20,16 @@ fi
 [ -z "${CD_ZOOKEEPER_BASEDIR}" ] && fatal "CD_ZOOKEEPER_BASEDIR is not set. Is Accumulo not registered as a service?"
 [ -z "${CD_ZOOKEEPER_DIST}" ] && fatal "CD_ZOOKEEPER_DIST is not set. Is Accumulo not registered as a service?"
 [ -z "${CD_ZOOKEEPER_SYMLINK}" ] && fatal "CD_ZOOKEEPER_SYMLINK is not set. Is Accumulo not registered as a service?"
-if [ -d "${CLOUD_DEVEL_HOME}/${CD_ZOOKEEPER_SYMLINK}/bin" ] ; then
-   warn "ZooKeeper directory already exists: '${CLOUD_DEVEL_HOME}/${CD_ZOOKEEPER_SYMLINK}/bin'"
-   fatal "Can't proceed with Accumulo install"
-fi
+
+zookeeperIsInstalled && info "ZooKeeper is already installed"
 
 [ -f "${INSTALL_DIR}/tarballs/${CD_ZOOKEEPER_DIST}" ] || fatal "ZooKeeper tarball not found"
 
 [ -z "${CD_ACCUMULO_BASEDIR}" ] && fatal "CD_ACCUMULO_BASEDIR is not set. Is Accumulo not registered as a service?"
 [ -z "${CD_ACCUMULO_DIST}" ] && fatal "CD_ACCUMULO_DIST is not set. Is Accumulo not registered as a service?"
 [ -z "${CD_ACCUMULO_SYMLINK}" ] && fatal "CD_ACCUMULO_SYMLINK is not set. Is Accumulo not registered as a service?"
-if [ -d "${CLOUD_DEVEL_HOME}/${CD_ACCUMULO_SYMLINK}/bin" ] ; then
-   warn "Accumulo directory already exists: '${CLOUD_DEVEL_HOME}/${CD_ACCUMULO_SYMLINK}/bin'"
-   fatal "Can't proceed with Accumulo install"
-fi
+
+accumuloIsInstalled && info "Accumulo is already installed" && exit 1
 
 [ -f "${INSTALL_DIR}/tarballs/${CD_ACCUMULO_DIST}" ] || fatal "Accumulo tarball not found"
 

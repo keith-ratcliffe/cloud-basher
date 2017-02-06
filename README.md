@@ -1,50 +1,51 @@
 
+Why does this thing exist?
+
+      To speed up my development and prototyping workflow
+
+What does this thing do?
+
+      Automates the steps that I'd otherwise have to perform manually to 
+      install/configure/teardown services, using a consistent/repeatable
+      & extensible process. That is all
+
+What the heck is it?
+
+      It's just a couple of bash scripts that provide a pluggable framework for doing 
+      whatever you want, with whichever bash-compatible services you're working with
+      
+      You can pick/choose which service plugins you want activated, modify existing
+      plugins, or create new plugins without much hassle
+
+      Currently you get Hadoop, Accumulo, and NiFi plugins out of the box. Standalone
+      single-node cluster configuration is implemented. Multi-node options coming soon
+
 Prerequisites
 
       None other than Linux/Bash, and an Internet connection to wget tarballs.
       Tested on CentOS 7. *Should* be fine on any Linux with Bash 4.x
 
-Why does this thing exist?
-
-      To speed up my development and prototyping workflow. Cloud stuff mostly
-
-What does this thing do?
-
-      Automates the steps that I'd otherwise have to perform manually to 
-      install/configure/teardown services, using a consistent, repeatable,
-      extensible process. That is all.
-
-What the heck is it?
-
-      It's just a couple of bash scripts that provide a pluggable framework for doing 
-      whatever you want with whichever (bash-compatible) services you need.
-
-      Currently you get Hadoop, Accumulo, and NiFi plugins out of the box. Standalone
-      single-node cluster configuration is implemented, but multi-node options coming soon.
-
-      You can easily pick/choose which service plugins you want, modify existing plugins,
-      or create new plugins without much hassle
-
 What does this thing do that something like Docker or Cloudera Manager couldn't do even better?
 
       Not much. However, additional dependencies and complexities here are minimal compared
-      with those. Distributed applications built on Hadoop and Accumulo have complex networking
-      and IPC requirements, which makes them challenging to implement using containers. And as
-      far as Cloudera Manager, I've spent far less time implementing this thing than I've spent
-      just trying to decipher its documentation.
+      with those. Applications built on Hadoop and Accumulo have complex networking and IPC
+      requirements, which makes them even more challenging to implement with containers.
+      And as far as Cloudera Manager goes, sadly, I've spent far less time implementing this
+      thing than I've spent trying to decipher Cloudera's documentation.
 
       That being said, I do love Docker ;)
 
 How do I get started?
 
     (1) Edit ~/.bashrc: 
-        Source cloud-devel-env.sh in your ~/.bashrc. E.g...
-        echo "source /path/to/this_dir/bin/cloud-devel-env.sh" >> ~/.bashrc
+        Source env.sh in your ~/.bashrc. E.g...
+        echo "source /path/to/this_dir/bin/env.sh" >> ~/.bashrc
 
     (2) Download tarballs: 
         Open a new terminal... 
         Tarballs for any registered services (in this case, Hadoop, Accumulo/ZooKeeper,
-        and NiFi) will begin downloading immediately.
+        and NiFi) will begin downloading immediately. If desired, update '*_DIST_URI' 
+        variables to affect which app versions get downloaded
       
     (3) Install services:
         When downloads are finished, execute the "installAll" command
@@ -68,5 +69,5 @@ How do I stop doing stuff?
 
 How do I find out more?
 
-    Read some code. There's about a 39% chance that it'll have some useful comments. 
-    Start with bin/cloud-devel-env.sh. It's the key to everything else
+    Read some code. There's about a 41% chance that it'll have some useful comments. 
+    Start with bin/env.sh. It's the key to everything else

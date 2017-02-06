@@ -1,8 +1,8 @@
 
-# Resolve cloud-devel-env.sh
+# Resolve env.sh
 INSTALL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="$( dirname "${INSTALL_DIR}" )"
-source "${BIN_DIR}/cloud-devel-env.sh"
+source "${BIN_DIR}/env.sh"
 
 if [ -f "${CLOUD_DEVEL_HOME}/${CD_JAVA_SYMLINK}/bin/java" ] ; then
    info "Java is already installed"

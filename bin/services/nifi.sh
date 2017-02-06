@@ -1,4 +1,4 @@
-# Sourced by cloud-devel-env.sh
+# Sourced by env.sh
 
 CD_NIFI_DIST_URI="http://apache.claz.org/nifi/1.1.1/nifi-1.1.1-bin.tar.gz"      # Download URI
 CD_NIFI_DIST="$( downloadTarball "${CD_NIFI_DIST_URI}" && echo "${tarball}" )"  # Tarball filename (dynamic)
