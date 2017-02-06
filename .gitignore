@@ -1,0 +1,12 @@
+# Ignore these...
+java-*
+hadoop-*
+accumulo-*
+zookeeper-*
+maven-*
+apache-maven-*
+nifi-*
+data
+
+# But do not ignore these...
+!java-*.tar.gz
