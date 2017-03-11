@@ -55,7 +55,7 @@ source "${BIN_DIR}/common.sh"
 
 register "hadoop"   # Service implementation: bin/services/hadoop.sh
 register "accumulo" # Service implementation: bin/services/accumulo.sh
-register "nifi"     # Service implementation: bin/services/nifi.sh 
+register "nifi"     # Service implementation: bin/services/nifi.sh
 
 # END SERVICE REGISTRATION  #############################################################
 
@@ -64,7 +64,7 @@ register "nifi"     # Service implementation: bin/services/nifi.sh
 # Unlike with Hadoop, Accumulo, and NiFi, there's no simple way to 'wget' a legit JDK/JRE
 # tarball directly from the interwebs, but it's easy enough to roll your own after yum/apt-get
 # installing one...
-CD_JAVA_DIST_URI="file://${BIN_DIR}/install/tarballs/java-1.7.0-openjdk-1.7.0.121.tar.gz"
+CD_JAVA_DIST_URI="file://${BIN_DIR}/install/tarballs/java-1.8.0-openjdk-1.8.0.121.tar.gz"
 CD_JAVA_DIST="$( downloadTarball "${CD_JAVA_DIST_URI}" && echo "${tarball}" )"
 CD_JAVA_BASEDIR="$( getTarballBasedir "${CD_JAVA_DIST}" && echo "${basedir}" )"
 CD_JAVA_SYMLINK="java-current"
