@@ -39,7 +39,7 @@ function register() {
    #       servicenameUninstall   - Uninstalls the service
    #       servicenameIsRunning   - Returns 0 if running, non-zero otherwise
    #       servicenameIsInstalled - Returns 0 if installed, non-zero otherwise
-   #       servicenamePrintEnv
+   #       servicenamePrintEnv    - Display current state of the service config
    #
    if [ -z "${servicename}" ] ; then
       error "Registration failed: service name was null"
