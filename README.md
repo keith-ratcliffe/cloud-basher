@@ -6,13 +6,13 @@ Why does this thing exist?
 What does this thing do?
 
       Automates the steps that I'd otherwise have to perform manually to 
-      install/configure/teardown services, using a consistent/repeatable
-      & extensible process. That is all
+      install/configure/teardown services, using a consistent & repeatable process.
+      That is all
 
 What the heck is it?
 
-      It's just a couple of bash scripts that provide a pluggable framework for doing 
-      whatever you want, with whichever bash-compatible services you're working with
+      It's just a couple of scripts that provide a pluggable framework for doing
+      whatever you want with any application that can be bootstrapped via bash
       
       You can pick/choose which service plugins you want activated, modify existing
       plugins, or create new plugins without much hassle
@@ -27,9 +27,9 @@ Prerequisites
 
 What does this thing do that something like Docker or Cloudera Manager couldn't do even better?
 
-      Not much. However, additional dependencies and complexities here are minimal compared
-      with those. Applications built on Hadoop and Accumulo have complex networking and IPC
-      requirements, which makes them even more challenging to implement with containers.
+      Nothing. However, dependencies and complexities here are minimal compared with
+      those. Applications built on Hadoop and Accumulo have complex networking and IPC
+      requirements, which makes them challenging to implement with containers.
       And as far as Cloudera Manager goes, sadly, I've spent far less time implementing this
       thing than I've spent trying to decipher Cloudera's documentation.
 

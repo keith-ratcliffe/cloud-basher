@@ -1,14 +1,15 @@
 # Sourced by env.sh
 
-CD_NIFI_DIST_URI="http://apache.claz.org/nifi/1.1.1/nifi-1.1.1-bin.tar.gz"      # Download URI
-CD_NIFI_DIST="$( downloadTarball "${CD_NIFI_DIST_URI}" && echo "${tarball}" )"  # Tarball filename (dynamic)
-CD_NIFI_BASEDIR="$( getTarballBasedir "${CD_NIFI_DIST}" && echo "${basedir}" )" # Base directory name (dynamic)
-CD_NIFI_SYMLINK="nifi-current"                                                  # Name to use for the symlink
+CD_NIFI_SERVICE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+CD_NIFI_DIST_URI="http://apache.claz.org/nifi/1.1.1/nifi-1.1.1-bin.tar.gz"
+CD_NIFI_DIST="$( downloadTarball "${CD_NIFI_DIST_URI}" "${CD_NIFI_SERVICE_DIR}" && echo "${tarball}" )"
+CD_NIFI_BASEDIR="$( getTarballBasedir "${CD_NIFI_DIST}" "${CD_NIFI_SERVICE_DIR}" && echo "${basedir}" )"
+CD_NIFI_SYMLINK="nifi"
 
 # Standard exports...
 export NIFI_HOME="${CLOUD_DEVEL_HOME}/${CD_NIFI_SYMLINK}"
-
-export PATH=$NIFI_HOME/bin:$PATH
+export PATH=${NIFI_HOME}/bin:$PATH
 
 # Service helpers...
 
@@ -40,9 +41,9 @@ function nifiIsInstalled() {
 }
 
 function nifiUninstall() {
-   if [ -d "${CLOUD_DEVEL_HOME}/${CD_NIFI_SYMLINK}/bin" ] ; then
+   if nifiIsInstalled ; then
       ( cd "${CLOUD_DEVEL_HOME}" && unlink "${CD_NIFI_SYMLINK}" ) || error "Failed to remove NiFi symlink"
-      rm -rf "${CLOUD_DEVEL_HOME}/bin/${CD_NIFI_BASEDIR}"
+      rm -rf "${CD_NIFI_SERVICE_DIR}/${CD_NIFI_BASEDIR}"
       info "NiFi uninstalled"
    else
       info "NiFi not installed. Nothing to do"
@@ -50,5 +51,13 @@ function nifiUninstall() {
 }
 
 function nifiInstall() {
-   ${CLOUD_DEVEL_HOME}/bin/install/install-nifi.sh
+   ${CD_NIFI_SERVICE_DIR}/install.sh
+}
+
+function nifiPrintenv() {
+   echo
+   echo "NiFi Environment"
+   echo
+   ( set -o posix ; set ) | grep NIFI_
+   echo
 }

@@ -7,6 +7,9 @@ maven-*
 apache-maven-*
 nifi-*
 data
+**/.idea
+*.iml
+*.swp
 
 # But do not ignore these...
 !java-*.tar.gz

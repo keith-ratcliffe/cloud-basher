@@ -2,43 +2,44 @@
 # Logging functions...
 
 function info() {
-   echo "INFO - $1"
+   echo "[INFO] - $1"
 }
 
 function warn() {
-   echo "WARN - $1"
+   echo "[WARN] - $1"
 }
 
 function error() {
-   echo "ERROR - $1"
+   echo "[ERROR] - $1"
 }
 
 function fatal() {
-   echo "FATAL - $1"
+   echo "[FATAL] - $1"
    echo "Aborting $( basename "$0" )" && exit 1
 }
 
 function register() {
-   servicename="$1"
-   servicescript="${CLOUD_DEVEL_HOME}/bin/services/${servicename}.sh"
+   local servicename="$1"
+   local servicescript="${CLOUD_DEVEL_HOME}/bin/services/${servicename}/bootstrap.sh"
    #
    # Here we create & maintain a simple registry of service names, so that services 
-   # are easily pluggable, and so that the services can be manipulated programatically 
-   # without having to hardcode their actual names in scripts
+   # are easily pluggable, and so that they can be manipulated without having hardcode
+   # their distinct names in scripts
    #
    # The service contract requires the following:
    #
-   #   A "bin/services/servicename.sh" script must exist containing any required 
+   #   A "bin/services/servicename/bootstrap.sh" script must exist containing any required
    #   environment variables needed for bootstrapping, and that script must provide
    #   implementations of the following functions:
    # 
-   #       "servicenameStart"       - Starts the service
-   #       "servicenameStop",       - Stops the service
-   #       "servicenameStatus"      - Current status of the service. PIDs if running
-   #       "servicenameInstall"     - Installs the service
-   #       "servicenameUninstall"   - Uninstalls the service
-   #       "servicenameIsRunning"   - Returns 0 if running, non-zero otherwise
-   #       "servicenameIsInstalled" - Returns 0 if installed, non-zero otherwise
+   #       servicenameStart       - Starts the service
+   #       servicenameStop        - Stops the service
+   #       servicenameStatus      - Current status of the service. PIDs if running
+   #       servicenameInstall     - Installs the service
+   #       servicenameUninstall   - Uninstalls the service
+   #       servicenameIsRunning   - Returns 0 if running, non-zero otherwise
+   #       servicenameIsInstalled - Returns 0 if installed, non-zero otherwise
+   #       servicenamePrintEnv
    #
    if [ -z "${servicename}" ] ; then
       error "Registration failed: service name was null"
@@ -61,7 +62,7 @@ function register() {
    CLOUD_DEVEL_SERVICES="${CLOUD_DEVEL_SERVICES} ${servicename}"
 }
 
-askYesNo() {
+function askYesNo() {
    # Get the user's 'yes|y' / 'no|n' reply to the given question
    # (Keeps asking until a valid response is given)
    echo
@@ -78,32 +79,34 @@ askYesNo() {
 
 function getTarballBasedir() {
    # Gets the directory name that will be produced by extracting the tarball
-   tarball="$1"
-   basedir="$( tar tf "${CLOUD_DEVEL_HOME}/bin/install/tarballs/${tarball}" | head -n 1 | cut -d '/' -f 1 )"
+   local tarball="$1"
+   local tarballdir="$2"
+   basedir="$( tar tf "${tarballdir}/${tarball}" | head -n 1 | cut -d '/' -f 1 )"
 }
 
 function downloadTarball() {
    # Downloads the specified tarball, if it doesn't already exist
-   uri="$1"
+   local uri="$1"
+   local tarballdir="$2"
    tarball="$( basename ${uri} )"
-   if [ ! -f "${CLOUD_DEVEL_HOME}/bin/install/tarballs/${tarball}" ] ; then
-      $( cd "${CLOUD_DEVEL_HOME}/bin/install/tarballs" && wget "${uri}" ) || error "Failed to wget '${uri}'"
+   if [ ! -f "${tarballdir}/${tarball}" ] ; then
+      $( cd "${tarballdir}" && wget "${uri}" ) || error "Failed to wget '${uri}'"
    fi
 }
 
 function writeSiteXml() {
    # Writes *-site.xml files, such as hdfs-site.xml, accumulo-site.xml, etc...
 
-   sitefile="$1" # The file name to write
-   siteconf="$2" # The property name/value pairs to write
+   local sitefile="$1" # The file name to write
+   local siteconf="$2" # The property name/value pairs to write
 
    # read the "name value" siteconf properties, one line at a time
    printf '%s\n' "$siteconf" | ( while IFS= read -r nameval ; do
        # parse the name and value from the line
-       name="$( echo $nameval | cut -d ' ' -f1 )"
-       value="$( echo $nameval | cut -d ' ' --complement -s -f1 )"
+       local name="$( echo $nameval | cut -d ' ' -f1 )"
+       local value="$( echo $nameval | cut -d ' ' --complement -s -f1 )"
        # concatenate the xml into a big blob
-       xml="${xml}$(printf "\n   <property>\n      <name>$name</name>\n      <value>$value</value>\n   </property>\n")"
+       local xml="${xml}$(printf "\n   <property>\n      <name>$name</name>\n      <value>$value</value>\n   </property>\n")"
    done
    # write the blob to file...
    printf "<configuration>${xml}\n</configuration>" > ${sitefile} )
@@ -168,12 +171,37 @@ function installAll() {
 }
 
 function uninstallAll() {
+   # All data will be removed by default. To keep data, add '--keep-data' argument
+
    # Uninstalls all registered services. 
    if servicesAreRunning ; then
       echo "Stop running services before uninstalling!"
       statusAll
       return 1
    fi
-   ${CLOUD_DEVEL_HOME}/bin/install/uninstall-all.sh
+
+   askYesNo "Uninstalling everything under '${CLOUD_DEVEL_HOME}'. This can not be undone.
+        Continue?" || exit 1
+
+   services=(${CLOUD_DEVEL_SERVICES})
+   for servicename in "${services[@]}" ; do
+      eval "${servicename}Uninstall"
+   done
+
+   if [[ -z  "$1" || "$1" != "--keep-data" ]] ; then
+      # Remove data
+      [ -d "${CLOUD_DEVEL_DATA}" ] && rm -rf "${CLOUD_DEVEL_DATA}" && info "Removed ${CLOUD_DEVEL_DATA}"
+   fi
 }
 
+function printenvAll() {
+   echo
+   echo "CLOUD-DEVEL Environment"
+   echo
+   ( set -o posix ; set ) | grep "CLOUD_DEVEL_"
+   echo
+   services=(${CLOUD_DEVEL_SERVICES})
+   for servicename in "${services[@]}" ; do
+      eval "${servicename}Printenv"
+   done
+}
