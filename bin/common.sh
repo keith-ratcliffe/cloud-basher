@@ -23,7 +23,7 @@ function register() {
    local servicescript="${CLOUD_DEVEL_HOME}/bin/services/${servicename}/bootstrap.sh"
    #
    # Here we create & maintain a simple registry of service names, so that services 
-   # are easily pluggable, and so that they can be manipulated without having hardcode
+   # are easily pluggable, and so that they can be manipulated without having to hardcode
    # their distinct names in scripts
    #
    # The service contract requires the following:
