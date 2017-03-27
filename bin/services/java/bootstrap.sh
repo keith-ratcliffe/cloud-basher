@@ -1,13 +1,16 @@
 # Sourced by env.sh
 
-CD_JAVA_SERVICE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CD_JAVA_SERVICE_DIR=${CD_JAVA_SERVICE_DIR:-$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )}
 
-CD_JAVA_DIST_URI="file://${CD_JAVA_SERVICE_DIR}/java-1.8.0-openjdk-1.8.0.121.tar.gz"
-CD_JAVA_DIST="$( downloadTarball "${CD_JAVA_DIST_URI}" "${CD_JAVA_SERVICE_DIR}" && echo "${tarball}" )"
-CD_JAVA_BASEDIR="$( getTarballBasedir "${CD_JAVA_DIST}" "${CD_JAVA_SERVICE_DIR}" && echo "${basedir}" )"
-CD_JAVA_SYMLINK="java"
+CD_JAVA_DIST_URI=${CD_JAVA_DIST_URI:-file://${CD_JAVA_SERVICE_DIR}/java-1.8.0-openjdk-1.8.0.121.tar.gz}
+CD_JAVA_DIST=${CD_JAVA_DIST:-$( basename "${CD_JAVA_DIST_URI}" )}
+CD_JAVA_SYMLINK=${CD_JAVA_SYMLINK:-java}
 
-export JAVA_HOME="${CLOUD_DEVEL_HOME}/${CD_JAVA_SYMLINK}"
+[ ! -f "${CD_JAVA_SERVICE_DIR}/${CD_JAVA_DIST}" ] && downloadTarball "${CD_JAVA_DIST_URI}" "${CD_JAVA_SERVICE_DIR}"
+
+CD_JAVA_BASEDIR="${CD_JAVA_BASEDIR:-$( getTarballBasedir "${CD_JAVA_DIST}" "${CD_JAVA_SERVICE_DIR}" "${CD_JAVA_SYMLINK}" )}"
+
+export JAVA_HOME=${JAVA_HOME:-${CLOUD_DEVEL_HOME}/${CD_JAVA_SYMLINK}}
 export PATH=${JAVA_HOME}/bin:$PATH
 
 function javaIsInstalled() {

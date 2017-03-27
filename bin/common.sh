@@ -81,7 +81,14 @@ function getTarballBasedir() {
    # Gets the directory name that will be produced by extracting the tarball
    local tarball="$1"
    local tarballdir="$2"
-   basedir="$( tar tf "${tarballdir}/${tarball}" | head -n 1 | cut -d '/' -f 1 )"
+   local symlink="$3"
+   local basedir=""
+   # if the service is already installed, we should just be able to get the
+   # basedir by resolving the symlink, which is way faster than option #2
+   [ -L "${CLOUD_DEVEL_HOME}/${symlink}" ] && basedir="$( basename $( readlink "${CLOUD_DEVEL_HOME}/${symlink}" ) )"
+   # if it's still null then determine basedir with 'tar -tf ...'
+   [ -z "${basedir}" ] && basedir="$( tar tf "${tarballdir}/${tarball}" | head -n 1 | cut -d '/' -f 1 )"
+   echo "${basedir}"
 }
 
 function downloadTarball() {
