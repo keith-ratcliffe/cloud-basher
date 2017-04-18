@@ -72,5 +72,5 @@ echo "      Start command: accumuloStart"
 echo "       Stop command: accumuloStop"
 echo "     Status command: accumuloStatus"
 echo
-echo "See CLOUD_DEVEL_HOME/bin/services/accumulo/service.sh to view/edit commands as needed"
+echo "See CLOUD_DEVEL_HOME/bin/services/accumulo/bootstrap.sh to view/edit commands as needed"
 
