@@ -62,6 +62,9 @@ Generate the ssh key now?"
       echo "Add key to ssh-agent..."
       ssh-add
    fi
+elif [ ! -f ~/.ssh/authorized_keys ] ; then
+   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+   chmod 0600 ~/.ssh/authorized_keys
 fi
 
 # Format namenode

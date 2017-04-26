@@ -16,7 +16,7 @@ function javaIsInstalled() {
 }
 
 function javaInstall() {
-    javaIsInstalled && info "Java is already installed" && exit 1
+    javaIsInstalled && info "Java is already installed" && return 1
     [ ! -f "${CD_JAVA_SERVICE_DIR}/${CD_JAVA_DIST}" ] && fatal "Java tarball not found"
     tar xf "${CD_JAVA_SERVICE_DIR}/${CD_JAVA_DIST}" -C "${CD_JAVA_SERVICE_DIR}"
     $( cd "${CLOUD_DEVEL_HOME}" && ln -s "bin/services/java/${CD_JAVA_BASEDIR}" "${CD_JAVA_SYMLINK}" )
