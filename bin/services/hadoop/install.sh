@@ -63,8 +63,12 @@ Generate the ssh key now?"
       ssh-add
    fi
 elif [ ! -f ~/.ssh/authorized_keys ] ; then
-   cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-   chmod 0600 ~/.ssh/authorized_keys
+   if [ -f ~/.ssh/id_rsa.pub ] ; then
+      cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+      chmod 0600 ~/.ssh/authorized_keys
+   else
+      error "Hadoop needs password-less ssh, but neither authorized_keys nor id_rsa.pub was found. Please configure ~/.ssh appropriately"
+   fi
 fi
 
 # Format namenode
