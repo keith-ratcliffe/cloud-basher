@@ -1,0 +1,14 @@
+allowed-tags:
+  - getting_started
+  - data_model
+  - ingest
+  - query
+  - build
+  - design
+  - administration
+  - architecture
+  - wildfly
+  - news
+  - releases
+  - development
+  - troubleshooting

@@ -1,0 +1,101 @@
+# This file is used to construct the 'docs' sidebar for DataWave 2.1. Note that if the sidebar 'version' below
+# matches that of site.latest_minor_release (in _config.yml), then _includes/sidebar.html will append "(Latest)" to the
+# sidebar heading for us automatically
+
+# General sidebar notes...
+
+# The goal here is to have sidebar setup for our various collection types, and for our various versions of DataWave
+# docs, be dynamic and data-driven rather than static-html-driven.
+
+# Using the Navgoco jQuery component as its basis, the sidebar code in _includes/sidebar.html will build the
+# accordion-style menu using the data provided below.
+
+# The code supports nesting up to 2 levels deep...could easily support more, but it probably impedes usability to
+# exceed 2 levels of nesting
+
+# Note that sidebar selection for each web page is typically defaulted in _config.yml based on the page's collection type.
+# However, the sidebar may be overridden, if needed, in the frontmatter section of the given page/post/doc/etc
+
+entries:
+- title: sidebar
+  product: DataWave
+  version: 2.1
+  folders:
+
+  - title: Getting Started
+    folderitems:
+
+    - title: Overview
+      url: /docs/2.1/getting-started/overview
+
+      subfolders:
+      - title: Quickstart
+        subfolderitems:
+        - title: Installation
+          url: /docs/2.1/getting-started/quickstart-install
+
+        - title: Reference
+          url: /docs/2.1/getting-started/quickstart-reference
+
+        - title: Troubleshooting
+          url: /docs/2.1/getting-started/quickstart-trouble
+
+      - title: Guided Tour
+        subfolderitems:
+        - title: Getting Started
+          url: /docs/2.1/tour/getting-started
+
+        - title: Query Basics
+          url: /docs/2.1/tour/query-basics
+
+        - title: Ingest Basics
+          url: /docs/2.1/tour/ingest-basics
+
+    - title: Data Model
+      url: /docs/2.1/getting-started/data-model
+
+    - title: Query Syntax
+      url: /docs/2.1/getting-started/query-syntax
+
+  - title: Administration
+    folderitems:
+
+    - title: Administration Overview
+      url: /docs/2.1/administration/overview
+
+      subfolders:
+      - title: Ingest Services Administration
+        subfolderitems:
+
+        - title: Basic Administrative Tasks
+          url: /docs/2.1/administration/ingest-basics
+
+        - title: Configuring Ingest Services
+          url: /docs/2.1/administration/ingest-config
+
+        - title: Logging Configuration
+          url: /docs/2.1/administration/ingest-logging
+
+      - title: Web Services Administration
+        subfolderitems:
+
+        - title: Basic Administrative Tasks
+          url: /docs/2.1/administration/web-basics
+
+        - title: Configuring Web Services
+          url: /docs/2.1/administration/web-config
+
+        - title: Logging Configuration
+          url: /docs/2.1/administration/web-logging
+
+  - title: Development
+    folderitems:
+
+    - title: Environment Setup
+      url: /docs/2.1/development/environment
+
+    - title: Query API Development
+      url: /docs/2.1/development/query-api
+
+    - title: Ingest API Development
+      url: /docs/2.1/development/ingest-api
