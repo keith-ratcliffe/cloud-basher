@@ -16,8 +16,8 @@ Additional use cases for DataWave include...
 * Construction and analysis of distributed graphs
 * Multi-tenant data architectures, with tenants having distinct security requirements and access patterns
 
-For data security, DataWave leverages Accumulo's [cell-level security][cell_level_sec] mechanism throughout its
-application tiers. As a result, organizations can secure their data with either coarse- or fine-grained access controls,
+For data security, DataWave leverages Accumulo's [cell-level security][cell_level_sec] mechanism as a core feature of
+its architecture. As a result, organizations can secure their data with either coarse- or fine-grained access controls,
 and they can easily integrate DataWave's client-facing services with their existing private key infrastructure (PKI)
 and user-auth services.
 
@@ -28,21 +28,23 @@ and user-auth services.
 DataWave is written in Java and its core services are built upon an extensible software architecture. DataWave was
 designed to support a high degree of customization within each layer of its architecture through highly configurable
 application components and through direct extension of software interfaces. DataWave's primary software components are
-its ingest and query frameworks, both of which are described in more detail below.
+its ingest and query frameworks, both of which are described in more detail below. To get DataWave's ingest and query
+components up and running quickly, checkout the [quickstart install](quickstart-install) and the [guided tour](../tour/getting-started)
 
 ## Ingest Framework
 
-The DataWave Ingest framework utilizes [Hadoop MapReduce][apache_hadoop] as its basis, and it is designed to support
-a high degree of customization through configuration alone. For example, DataWave can be configured to ingest
-arbitrarily-defined data schemas with no software development required, providing that the ingested schemas are encoded
-in common formats such as CSV, JSON, etc.
+The DataWave Ingest framework utilizes MapReduce as its basis. It is highly scalable, and it is designed to support a
+high degree of customization through configuration alone. For example, DataWave can be configured to ingest arbitrarily-defined
+data schemas with no software development required, providing that the ingested schemas are encoded in common file formats
+such as CSV, JSON, XML, etc.
 
-DataWave Ingest can also be extended to accept *new* file formats with minimal software development. This is typically
-accomplished by subclassing one or more [Ingest API](../development/ingest-api) constructs and by extending
-familiar Hadoop MapReduce interfaces such as InputFormat and RecordReader. These API extensions are primarily employed
-within the map phase of the ingest job and delegate the majority of work to existing base classes within the API. These
-classes perform the work of transforming your raw data objects into Accumulo [key/value pairs][acc_data_model] in
-accordance with DataWave's [data model](data-model) and as dictated by user-supplied configuration.
+DataWave Ingest can also be extended to accept *new* file formats with minimal software development. Typically,
+this is accomplished by extending one or more [Ingest API](../development/ingest-api) base classes and by implementing
+familiar Hadoop MapReduce abstractions such as *InputFormat* and *RecordReader*. These extensions are primarily employed
+within the map phase of the ingest job and delegate the majority of work to existing base classes within the API. Thus,
+highly scalable map tasks perform the work of transforming your raw data objects into Accumulo
+[key/value pairs][acc_data_model], in accordance with DataWave's [data model](data-model) and as dictated by user-supplied
+configuration.
 
 The DataWave project provides several ingest examples for a variety of file formats and data schemas. These and other
 ingest topics will be discussed in greater detail within subsequent [pages](/pages/tags/ingest) of this user documentation. 
@@ -52,9 +54,9 @@ ingest topics will be discussed in greater detail within subsequent [pages](/pag
 The design of DataWave's [Query API](../development/query-api) is predicated largely upon [Java Expression Language (JEXL)][jexl],
 which serves two key roles within the overall framework. First, JEXL is used as the basis for DataWave's [query language](query-syntax).
 Thus, it plays a central role within client requests to retrieve data of interest. JEXL is also utilized extensively
-within the API to drive query execution. That is, DataWave leverages JEXL libraries to harness a variety of stock and custom
-[Accumulo Iterators][acc_iterators] to facilitate query evaluation, in order to efficiently scan and filter data stored
-in DataWave's [tables](data-model).
+within the Query API's internals to drive query execution. That is, DataWave leverages JEXL libraries to harness a variety
+of stock and custom [Accumulo Iterators][acc_iterators] to facilitate query evaluation, in order to efficiently scan and
+filter data stored in DataWave's [tables](data-model).
 
 <div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> JEXL syntax
 is DataWave's default. However, as a convenience for those already familiar with Lucene-based applications, queries may

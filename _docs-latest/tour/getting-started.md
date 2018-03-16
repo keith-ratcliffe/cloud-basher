@@ -8,16 +8,13 @@ summary: The guided tour will introduce you to DataWave's ingest and query compo
 ## Verify Your Environment Setup
 
 At this point, you should have a standalone DataWave environment instantiated via the [Quickstart Installation](../getting-started/quickstart-install).
-The quickstart environment provides several example datasets and pre-built configs that we'll be utilizing throughout
-the tour. It also provides many [bash functions](../getting-started/quickstart-reference) that encapsulate and simplify
-your command line interactions with DataWave's services. Follow the steps below to ensure that your environment is up
-and running and functioning as required.
+Throughout the tour, we'll be using its example datasets, its pre-built configs, and many of its helpful [bash functions](../getting-started/quickstart-reference).
+Follow the steps below to ensure that your environment is up and functioning as required.
 
 ### Check the Status of Your Services
 
-In a bash terminal, check the status of your running services. The `allStatus` command's output should
-appear as below, with different PIDs of course. All services should be running except for DataWave Ingest, which we'll
-start up later on in the tour.
+Execute the `allStatus` command to show the PIDs of your running DataWave services. If DataWave Ingest isn't running,
+that's fine. We'll start it up later on in the tour
 
 ```bash
  $ allStatus
@@ -27,32 +24,38 @@ start up later on in the tour.
     DataWave Web is running. PIDs: 17462
 ```
 
-If your output is different than above, then perform the commands as shown below.
+### Check Your DataWave Web Deployment
+
+If DataWave Web is not currently running, then perform the commands shown below to verify that web services are up
+and functioning as required
 
 ```bash
- $ allStop          # Attempts to cleanly stop all running services (add --hard flag, if necessary)
- $ datawaveWebStart # Starts up web services along with any dependencies (e.g., Hadoop, Accumulo, etc)
-```
+ $ datawaveWebStart # Will start up web services along with any dependencies, if needed
+ 
+ [DW-INFO] - Starting Wildfly
+ [DW-INFO] - Polling for EAR deployment status every 4 seconds (15 attempts max)
+     -- Wildfly process not found (1/15)
+     +- Wildfly up (7663). EAR deployment pending (2/15)
+        ...
+        ...
+     ++ DataWave Web successfully deployed ...
 
-### Verify Your *DataWave Web* Deployment
+ [DW-INFO] - Documentation: https://localhost:8443/DataWave/doc
+ [DW-INFO] - Data Dictionary: https://localhost:8443/DataWave/DataDictionary
 
-Finally, it's a good idea to verify that DataWave's web services are deployed and functioning as required
-
-```bash
- $ datawaveWebTest  # Executes pre-configured, curl-based tests against the REST API
+ $ datawaveWebTest # Execute pre-configured, curl-based tests against the REST API
+   ...
    ...
    QueryMetricsQueryCreateAndNext
    QueryMetricsQueryClose
    QueryMetricsQueryZeroResults204
    
    Failed Tests: 0 
-   ...
-   
 ```
 
 ## Troubleshooting
 
-If you experience any issues with your environment during this or any subsequent exercises, please see the [troubleshooting guide](../getting-started/quickstart-trouble)
-for help before proceeding. 
+If you experience any issues with your environment during this or any subsequent exercises, please see the
+[troubleshooting guide](../getting-started/quickstart-trouble) for help before proceeding. 
 
 

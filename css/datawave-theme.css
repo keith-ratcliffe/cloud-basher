@@ -140,3 +140,11 @@ span.label.label-news {
 span.label.label-pages {
     background-color: #3c639a;
 }
+
+/* Max height of all code blocks */
+
+pre.highlight {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: auto;
+}

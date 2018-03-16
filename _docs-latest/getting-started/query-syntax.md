@@ -1,7 +1,7 @@
 ---
 title: "Query Syntax Guide"
 tags: [getting_started, query]
-summary: This page gives an overview of DataWave's JEXL- and Lucene-based query syntax
+summary: This page gives an overview of DataWave's JEXL and Lucene query syntax options
 ---
 <h2>Introduction</h2>
 <p>DataWave's query logic implementations will typically accept expressions conforming to either JEXL syntax (the default)

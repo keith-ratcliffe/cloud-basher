@@ -67,7 +67,7 @@ the quickstart and you've updated or overridden any of the quickstart's environm
 
 ---
 
-## Noteworthy DataWave Functions
+## DataWave Functions
 
 ### Scripts
 
@@ -102,20 +102,20 @@ A few noteworthy functions and their descriptions are listed by category below (
 
 ### DataWave Ingest Functions
     
-| **`datawaveIngestJson /path/to/local/some-tvmaze.json`** |
+| **`datawaveIngestJson /path/to/some/tvmaze.json`** |
 | Kick off M/R job to ingest raw JSON file containing TV show data from <http://tvmaze.com/api> |
 | Ingest config file: [myjson-ingest-config.xml][dw_blob_myjson_config] |
 | File ingested automatically by the DataWave Ingest installer (install-ingest.sh): [tvmaze-api.json][dw_blob_tvmaze_raw_json] |
 | Use the [ingest-tv-shows.sh][dw_blob_ingest_tvshows] script to download &amp; ingest more of your favorite shows |
 | Implementation: [bootstrap-ingest.sh][dw_blob_datawave_bootstrap_ingest_json] |
 
-| **`datawaveIngestWikipedia /path/to/local/some-enwiki.xml`** |
+| **`datawaveIngestWikipedia /path/to/some/enwiki.xml`** |
 | Kick off M/R job to ingest a raw Wikipedia XML file. Any standard enwiki-flavored file should suffice |
 | Ingest config file: [wikipedia-ingest-config.xml][dw_blob_mywikipedia_config] |
 | File ingested automatically by the DataWave Ingest installer (install-ingest.sh): [enwiki-20130305*.xml][dw_blob_enwiki_raw_xml] |
 | Implementation: [bootstrap-ingest.sh][dw_blob_datawave_bootstrap_ingest_wiki] |
     
-| **`datawaveIngestCsv /path/to/local/some.csv`** |
+| **`datawaveIngestCsv /path/to/some/file.csv`** |
 | Kick off M/R job to ingest a raw CSV file similar to [my.csv][dw_blob_my_raw_csv] |
 | Ingest config file: [mycsv-ingest-config.xml][dw_blob_mycsv_config] |
 | File ingested automatically by the DataWave Ingest installer (install-ingest.sh): [my.csv][dw_blob_my_raw_csv] |
