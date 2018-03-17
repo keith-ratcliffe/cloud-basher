@@ -39,13 +39,12 @@ or <a class="btn btn-success" style="width: 220px;" href="https://github.com/{{ 
 you select for DataWave's source code will be referenced as **DW_HOME** from this point forward. Wherever it appears in a bash
 command below, be sure to substitute it with the full path to the actual directory</div>
 
-<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Docker Alternative:</b> If
-you would prefer to run the DataWave Quickstart environment as a Docker container, skip the 4 steps described below.
-Go **[here][dw_docker_alternative]** instead and view the **README**
-<br/><br/>Note that the **[Overriding Default Binaries](#overriding-default-binaries)** section below is relevant to the Docker image build as well 
-</div>
+### Docker Alternative
 
----
+If you would prefer to run the DataWave Quickstart environment as a Docker container, skip the 4 steps described below.
+Go [here][dw_docker_alternative] instead and view the **README**
+
+Note that the [Override Default Binaries](#override-default-binaries) section below is also relevant to the Docker image build
 
 ## Setup and Installation
 
@@ -73,40 +72,40 @@ executed the command in **Step 2**, you can easily start over via the uininstall
   $ echo "source DW_HOME/contrib/datawave-quickstart/bin/env.sh" >> ~/.bashrc  # Step 1
 ```
 
-The **[env.sh][dw_blob_env_sh]** script is a wrapper that bootstraps each individual service in turn by sourcing its
-respective **{servicename}/boostrap.sh** script. These bootstrap scripts are central to the quickstart's design,
+The *[env.sh][dw_blob_env_sh]* script is a wrapper that bootstraps each individual service in turn by sourcing its
+respective *{servicename}/boostrap.sh* script. These bootstrap scripts are central to the quickstart's design,
 as they define supporting bash variables and bash functions, encapsulating both the configuration and functionality of
 each service in a consistent manner.
 
-Thus, adding the line above to your **~/.bashrc** ensures that your DataWave environment and all its services will remain
+Thus, adding the line above to your *~/.bashrc* ensures that your DataWave environment and all its services will remain
 configured correctly across bash sessions.
 
-To keep things as simple as possible, **DataWave**, **Hadoop**, **Accumulo**, **ZooKeeper**, and **Wildfly** will be installed under your
-**DW_HOME/contrib/datawave-quickstart** directory, and all will be owned by / executed as the current user.
+To keep things as simple as possible, *DataWave*, *Hadoop*, *Accumulo*, *ZooKeeper*, and *Wildfly* will be installed under your
+*DW_HOME/contrib/datawave-quickstart* directory, and all will be owned by / executed as the current user.
 
 <br/>
 <div markdown="span" class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> <b>Caution</b><br/>
 If you currently have any of the above installed locally under *any* user account, you should verify that those
 services are stopped before proceeding. Moreover, the command in **Step 1** aims to avoid conflicts with existing services
-by making this the *last* line in your **~/.bashrc** file, to ensure that variables already defined there will be properly
+by making this the *last* line in your *~/.bashrc* file, to ensure that variables already defined there will be properly
 overridden (e.g., variables such as *HADOOP_HOME*, *ACCUMULO_HOME*, *WILDFLY_HOME*, etc).
 <br/><br/>
 Typically, these precautions will suffice to avoid conflicts with existing services. However, if conflicts should arise
-due to any external settings that override your **~/.bashrc**, beware that the quickstart installation could fail and
+due to any external settings that override your *~/.bashrc*, beware that the quickstart installation could fail and
 possibly even harm your existing installs
 </div>
 
-#### Overriding Default Binaries
+#### Override Default Binaries
 
-If needed, you may override the version of the binary that gets downloaded and installed for a particular service. For example,
-you may want to use your own locally-built binaries for Hadoop, Accumulo, etc. Or you may simply want to test with the latest
-version of a given service. Before proceeding with the installation, simply override the desired `DW_*_DIST_URI` value (defined
-in the service's **bootstrap.sh**), following the example below...
+If needed, you may override the version of the binary that gets downloaded and installed for a particular service. For
+example, you may want to use your own locally-built binaries for Hadoop. Or you may simply want to test with the latest
+version of a given service. Before proceeding with the install, override the desired *DW_\*_DIST_URI* value
+as shown below...
 ```bash
   $ vi ~/.bashrc
      ...
   
-     export DW_ACCUMULO_DIST_URI=http://my.favorite.apache.mirror/accumulo/1.8.X/accumulo-1.8.X-bin.tar.gz
+     export DW_ACCUMULO_DIST_URI=http://favorite.apache.mirror/accumulo/1.8/accumulo-1.8.X-bin.tar.gz
      export DW_JAVA_DIST_URI=file:///my/local/binaries/jdk-8-linux-x64.tar.gz
      export DW_MAVEN_DIST_URI=file:///my/local/binaries/apache-maven-3.X.tar.gz
      export DW_HADOOP_DIST_URI=file:///my/local/binaries/hadoop-2.6.0-cdh5.9.1.tar.gz
@@ -127,9 +126,11 @@ in the service's **bootstrap.sh**), following the example below...
 ```bash
   $ source ~/.bashrc                                                           # Step 2
 ```
-As soon as **~/.bashrc** is sourced as shown above, tarballs for registered services will be automatically retrieved from
-their `DW_*_DIST_URI` locations and copied into place. A DataWave build will also be kicked off automatically in turn, and
-DataWave's ingest and web services binaries will be copied into place upon conclusion of the build.
+As soon as *~/.bashrc* is sourced as shown above, tarballs for registered services will be automatically copied or downloaded from
+their configured locations and copied into place.
+
+A DataWave build will also be kicked off automatically in turn, and DataWave's ingest and web services binaries will be
+copied into place upon conclusion of the build.
 
 Step 2 may also be performed by simply opening a new terminal window, which starts a new bash session and accomplishes the same thing
  
@@ -138,7 +139,7 @@ minutes to complete, so it's a good time step away for a break</div>
 
 <div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The **DW_DATAWAVE_BUILD_COMMAND**
 variable in [datawave/bootstrap.sh][dw_blob_datawave_bootstrap_mvn_cmd] defines the Maven command used for the build. It may be overridden
-in **~/.bashrc** or from the command line as needed</div>
+in *~/.bashrc* or from the command line as needed</div>
 
 ---
 
@@ -152,7 +153,7 @@ The `allInstall` bash function will initialize and configure all services in the
 individual services may be installed one at a time, if desired, using their respective `{servicename}Install` bash functions.
 
 <div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> All binaries are
-extracted/installed inside their respective service directories, i.e., under **datawave-quickstart/bin/services/{servicename}/**</div>
+extracted/installed inside their respective service directories, i.e., under *datawave-quickstart/bin/services/{servicename}/*</div>
 
 <div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> As part of the
 installation of DataWave Ingest, example datasets will be ingested automatically via MapReduce for demonstration purposes.
@@ -172,9 +173,9 @@ DataWave's REST API. Note any test failures, if present, and check logs for erro
 
 ## What's Next?
 
-* If all web service tests passed in **Step 4**, then you're ready for the **[guided tour](../tour/getting-started)**.
-* If you encountered any issues along the way, please read through the **[troubleshooting](quickstart-trouble)** guide.
-* To learn more about the quickstart environment and its available features, check out the **[quickstart reference](quickstart-reference)**.
+* If all web service tests passed in *Step 4*, then you're ready for the [guided tour](../tour/getting-started).
+* If you encountered any issues along the way, please read through the [troubleshooting](quickstart-trouble) guide.
+* To learn more about the quickstart environment and its available features, check out the [quickstart reference](quickstart-reference).
 
 
 [dw_blob_env_sh]: https://github.com/NationalSecurityAgency/datawave/blob/master/contrib/datawave-quickstart/bin/env.sh

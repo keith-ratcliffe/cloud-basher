@@ -71,7 +71,7 @@ Initialize server-side resources and retrieve a unique ID for the query
  $ /usr/bin/curl -X POST https://localhost:8443/DataWave/Query/EventQuery/create \
  ... \ 
  -d pagesize=10 \                                  # Max results to return per page
- -d auths=BAR,FOO,PRIVATE,PUBLIC \                 # Subset (or all) of user's Accumulo auths to enable
+ -d auths=BAR,FOO,PRIVATE,PUBLIC \                 # Accumulo auths to enable for user
  -d begin=19700101 -d end=20990101 \               # Date range filter
  -d queryName=Query_20180312121809 \               # Query name that's meaningful to user
  -d columnVisibility=BAR%26FOO \                   # Viz expression to use for query logging, etc.
