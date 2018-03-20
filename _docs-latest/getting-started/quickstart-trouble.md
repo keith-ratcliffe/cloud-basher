@@ -4,10 +4,10 @@ tags: [getting_started]
 summary: This page provides troubleshooting help for the DataWave Quickstart
 ---
 
-## Troubleshoot DataWave Issues
+## DataWave-Specific Issues
 
-<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The path to
-your local *DW_HOME/contrib/datawave-quickstart* directory will be referenced below as *QUICKSTART_HOME* from this
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Your
+local *DW_HOME/contrib/datawave-quickstart* directory will be refererred to as **QUICKSTART_HOME** from this
 point forward.
 </div>
 

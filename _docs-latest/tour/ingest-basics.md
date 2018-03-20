@@ -1,8 +1,10 @@
 ---
-title: "Guided Tour: Ingest Basics"
+title: "DataWave Tour: Ingest Basics"
 layout: tour
 tags: [getting_started, ingest]
-summary: The guide below will introduce you to DataWave's ingest and query components and provide several examples of how to use and configure them. In order to follow along with the examples, you should first complete the <a href="quickstart-install">Quickstart Installation</a>
+summary: |
+  The guide below will introduce you to DataWave's Ingest API. In order to follow along with the examples, you should
+  first complete the <a href="quickstart-install">Quickstart Installation</a>
 ---
 
 ## Getting Started

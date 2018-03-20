@@ -1,6 +1,6 @@
 ---
 title: "Data Model"
-tags: [getting_started, architecture, data_model, ingest, query]
+tags: [getting_started, data_model, ingest, query]
 summary: To facilitate storage, indexing, and retrieval, DataWave organizes data within Accumulo tables as described below
 ---
 

@@ -1,45 +1,54 @@
 ---
-title: "Guided Tour: Query Basics"
+title: "DataWave Tour: Query Basics"
 layout: tour
 tags: [getting_started, query]
-summary: The examples below will demonstrate usage of DataWave's Query API. In order to follow along in your own DataWave environment, you should first complete the <a href="../getting-started/quickstart-install">Quickstart Installation</a>
+summary: |
+  The examples below will demonstrate usage of DataWave's Query API. In order to follow along in your own DataWave
+  environment, you should first complete the <a href="../getting-started/quickstart-install">Quickstart Installation</a>
 ---
 
 ## A Simple Query Example
 
-At ingest time, DataWave creates and maintains a data dictionary
+DataWave creates and maintains a data dictionary
 ([https://localhost:8443/DataWave/DataDictionary](https://localhost:8443/DataWave/DataDictionary)) of known data types
 and their associated field names. A typical DataWave query expression will leverage one or more of these field names to
-find data of interest, as demonstrated by the example below.
+find data of interest.
 
-We'll start with a simple example to retrieve TV shows from our [TVMAZE-API](http://tvmaze.com/api)
-example [data](https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-json/src/test/resources/input/tvmaze-api.json).
-This data was ingested automatically during the quickstart setup via the [datawaveIngestJson](../getting-started/quickstart-reference#datawave-ingest-functions)
-helper function.
+Here, we'll construct a simple query that uses the *GENRES* field from our *tvmaze* data type to find TV shows in the
+action and adventure genres.
+
+<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> 
+The data for this example originated from [tvmaze.com/api](http://tvmaze.com/api), and the file that we ingested automatically
+during the quickstart setup is [here](https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-json/src/test/resources/input/tvmaze-api.json).
+For more information, view the [datawaveIngestJson](../getting-started/quickstart-reference#datawave-ingest-functions)
+function documentation
+</div>
 
 ### The Query Expression
 
-In this example, we'll construct a simple query that uses the *GENRES* field from our *tvmaze* data type to find TV shows
-in the action and adventure genres. DataWave accepts query expressions in either JEXL or Lucene syntax
-as shown below. See the [syntax guide](../getting-started/query-syntax) for more information.
+DataWave accepts query expressions in either JEXL or Lucene syntax as shown below.
 
 <div class="row">
   <div class="col-md-6">
-       <pre># Lucene Syntax...<br /><br />GENRES:action OR GENRES:adv*</pre>
+       <h4>Lucene</h4>
+       <pre>GENRES:action OR GENRES:adv*</pre>
   </div>
   <div class="col-md-6">
-       <pre># JEXL Syntax...<br /><br />GENRES == 'action' || GENRES =~ 'adv.*'</pre>
+       <h4>JEXL</h4>
+       <pre>GENRES == 'action' || GENRES =~ 'adv.*'</pre>
   </div>
 </div>
+
+For help with query syntax, view the [guide](../query/syntax).
 
 ## Using the Query API
 
 <div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Most query
 examples in the guided tour will utilize the quickstart's
-**[datawaveQuery](https://github.com/NationalSecurityAgency/datawave/blob/master/contrib/datawave-quickstart/bin/query.sh#L16)**
-function. It provides a curl-based client that simplifies your command-line interactions with the Query API
-and sets reasonable defaults for most parameters. Query parameters can also be easily added and/or overridden for
-experimentation purposes.<br/><br/>Use **`datawaveQuery --help`** for assistance<br/><br/>
+**datawaveQuery** [function](../getting-started/quickstart-reference#datawave-web-functions). It provides a curl-based
+client that streamlines your interactions with the Query API and sets reasonable defaults for most parameters.
+Query parameters can also be easily added and/or overridden.
+<br/><br/>Use **`datawaveQuery --help`** for assistance<br/><br/>
 More importantly, in order to demonstrate Query API usage, each example below will display the key aspects of 
 actual curl command used and also display the web service response 
 </div>
@@ -55,7 +64,7 @@ actual curl command used and also display the web service response
 
 DataWave/Query/{ query-logic }/create (*POST*)
 
-Initialize server-side resources and retrieve a unique ID for the query
+Initializes server-side resources and responds with a unique ID for the query
 
 ```bash
  # Quickstart client command...
@@ -76,7 +85,7 @@ Initialize server-side resources and retrieve a unique ID for the query
  -d queryName=Query_20180312121809 \               # Query name that's meaningful to user
  -d columnVisibility=BAR%26FOO \                   # Viz expression to use for query logging, etc.
  -d query=GENRES%3Aaction%20OR%20GENRES%3Aadv%2A \ # Query expression, URL-encoded
- -d query.syntax=JEXL                              # Syntax identifier
+ -d query.syntax=LUCENE                            # Syntax identifier
  
  # Web service response...
  
@@ -202,14 +211,14 @@ Release any server-side resources (*datawaveQuery* client may have already done 
 </div>
 </div>
 
-## In Summary
+## Summary
 
 In **Step 1**, to initialize our query, we invoked *DataWave/Query/{ query-logic }/create* using *EventQuery* for the logic parameter.
 
-* Alternatively, we could have used the *createAndNext* endpoint instead, which combines *Step 1* and *Step 2* into
+* Alternatively, we could have used the *createAndNext* endpoint, which combines *Step 1* and *Step 2* into
   a single client request for convenience, automatically retrieving the first page of results, if any
 
-* *EventQuery* here denotes the [query logic component](../development/query-api#query-logic-components) that we
+* *EventQuery* here denotes the [query logic component](../query/development#query-logic-components) that we
   used for query execution. Semantically, an *event* in this context is a simple abstraction that DataWave uses to denote a
   single date-sorted record stored within DataWave's [primary data table](../getting-started/data-model#primary-data-table).
   Thus, the *EventQuery* logic is the primary API component that DataWave provides for fetching *events* from this table
@@ -231,7 +240,7 @@ In **Step 3**, to release server-side resources, we invoked *DataWave/Query/{ qu
 * Query clients should always invoke the *close* endpoint to release server-side resources when no further interaction
   with the query is needed
   
-* Production query clients should be designed to automatically invoke *close* when *next* has no more results to
-  return (as indicated by HTTP status code *204*), and also when the client encounters an unrecoverable error anytime
-  after query creation
+* Production query clients should be designed to automatically invoke *close* when *next* has no more results (as
+  indicated by HTTP status code *204*), and also when the client encounters an unrecoverable error anytime after
+  query creation
   

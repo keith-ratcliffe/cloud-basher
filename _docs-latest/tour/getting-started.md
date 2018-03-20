@@ -1,14 +1,18 @@
 ---
-title: "Guided Tour: Getting Started"
+title: "DataWave Tour: Getting Started"
 layout: tour
-tags: [getting_started, ingest, query]
-summary: The guided tour will introduce you to DataWave's ingest and query components and provide several examples of how to use and configure them. In order to follow along with the examples, you should first complete the <a href="../getting-started/quickstart-install">Quickstart Installation</a>
+tags: [getting_started]
+toc: false
+summary: |
+  The guided tour will introduce you to DataWave's ingest and query components and provide several examples of how to use
+  and configure them. In order to follow along with the examples, you should first complete the
+  <a href="../getting-started/quickstart-install">Quickstart Installation</a>
 ---
 
 ## Verify Your Environment Setup
 
-At this point, you should have a standalone DataWave environment instantiated via the [Quickstart Installation](../getting-started/quickstart-install).
-Throughout the tour, we'll be using its example datasets, its pre-built configs, and many of its helpful [bash functions](../getting-started/quickstart-reference).
+At this point, you should have a standalone DataWave Quickstart environment instantiated. Throughout the tour, we'll be
+using its example datasets, its pre-built configs, and many of its [utility functions](../getting-started/quickstart-reference).
 Follow the steps below to ensure that your environment is up and functioning as required.
 
 ### Check the Status of Your Services
@@ -42,7 +46,8 @@ and functioning as required
 
  [DW-INFO] - Documentation: https://localhost:8443/DataWave/doc
  [DW-INFO] - Data Dictionary: https://localhost:8443/DataWave/DataDictionary
-
+```
+```bash
  $ datawaveWebTest # Execute pre-configured, curl-based tests against the REST API
    ...
    ...

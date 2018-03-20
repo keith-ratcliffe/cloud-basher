@@ -6,9 +6,9 @@ summary: This page provides reference material for the DataWave Quickstart
 
 ## Service Bootstrap Functions
 
-See *bin/services/{servicename}/bootstrap.sh* where *{servicename}* is one of...
-                                              
-hadoop \| accumulo \| zookeeper \| datawaveWeb \| datawaveIngest \| datawave (alias for both)
+The functions below are implemented in *bin/services/{servicename}/bootstrap.sh*, where *{servicename}* is one of 
+
+**hadoop** \| **accumulo** \| **datawave**  
 
 | Function Name&nbsp;&nbsp;&nbsp; | Description |
 |----------------:|:------------- |
@@ -22,11 +22,17 @@ hadoop \| accumulo \| zookeeper \| datawaveWeb \| datawaveIngest \| datawave (al
 | ` {servicename}Printenv ` | Display current state of the service configuration, bash variables, etc |
 | ` {servicename}PidList ` | Display all service PIDs on a single line, space-delimited |
 
+These service names are also valid...
+
+- **zookeeper**: managed by the *accumulo* service bootstrap
+- **datawaveWeb**: managed by the *datawave* service bootstrap
+- **datawaveIngest**: managed by the *datawave* service bootstrap
+
 ---
 
 ## Utility Bootstrap Functions
 
-See [bin/common.sh][dw_blob_common_sh]
+The functions below are implemented in [bin/common.sh][dw_blob_common_sh]
 
 | Function Name | Description |
 |---------------:|:------------- |
@@ -141,17 +147,17 @@ In the quickstart environment, DataWave Web is PKI enabled by default. The follo
 |----------:|------|------------ |
 | [ca.jks][dw_blob_ca_jks] | JKS | Truststore for the Wildfly JEE Application Server |
 | [testServer.p12][dw_blob_server_p12] | PKCS12 | Server Keystore for the Wildfly JEE Application Server |
-| [testUser.p12][dw_blob_user_p12] | PKCS12 | Test user client cert (*Hint*: If testing DW in a browser, don't [forget](quickstart-trouble#403-forbidden-from-browser) to import it) |
+| [testUser.p12][dw_blob_user_p12] | PKCS12 | Test user client cert |
         
-* Passwords (*ssshhhhhhhh!*) for all of the above: *`secret`*
-
-* The goal of the quickstart's PKI setup is to demonstrate DataWave's ability to be integrated easily into an organization's existing
-  private key infrastructure and user authorization services. See [datawave/bootstrap-user.sh][dw_blob_datawave_bootstrap_user]
-  for more information on configuration of the test user's roles and associated Accumulo authorizations
+* Passwords for all of the above: *`secret`*
 
 * To access DataWave Web endpoints in a browser, you'll need to import the client cert into the browser's certificate store
 
-* If you'd like to test with your own certificate materials, override the keystore &amp; truststore variables from [datawave/bootstrap.sh][dw_blob_datawave_bootstrap_pki]
+* The goal of the quickstart's PKI setup is to demonstrate DataWave's ability to be integrated easily into an organization's existing
+  private key infrastructure and user auth services. See [datawave/bootstrap-user.sh][dw_blob_datawave_bootstrap_user]
+  for more information on configuration of the test user's roles and associated Accumulo authorizations
+
+* To test with your own certificate materials, override the keystore &amp; truststore variables from [datawave/bootstrap.sh][dw_blob_datawave_bootstrap_pki]
   within your *~/.bashrc* prior to [installing the quickstart](quickstart-install)
 
 [dw_blob_env_sh]: https://github.com/NationalSecurityAgency/datawave/blob/master/contrib/datawave-quickstart/bin/env.sh

@@ -28,6 +28,9 @@ entries:
     - title: Overview
       url: /docs/2.1/getting-started/overview
 
+    - title: Data Model
+      url: /docs/2.1/getting-started/data-model
+
       subfolders:
       - title: Quickstart
         subfolderitems:
@@ -40,62 +43,49 @@ entries:
         - title: Troubleshooting
           url: /docs/2.1/getting-started/quickstart-trouble
 
-      - title: Guided Tour
-        subfolderitems:
-        - title: Getting Started
-          url: /docs/2.1/tour/getting-started
+    - title: Development
+      url: /docs/2.1/getting-started/development
 
-        - title: Query Basics
-          url: /docs/2.1/tour/query-basics
+  - title: Tour
+    folderitems:
+    - title: Getting Started
+      url: /docs/2.1/tour/getting-started
 
-        - title: Ingest Basics
-          url: /docs/2.1/tour/ingest-basics
+    - title: Query Basics
+      url: /docs/2.1/tour/query-basics
 
-    - title: Data Model
-      url: /docs/2.1/getting-started/data-model
+    - title: Ingest Basics
+      url: /docs/2.1/tour/ingest-basics
+
+  - title: Ingest
+    folderitems:
+
+    - title: Overview
+      url: /docs/2.1/ingest/overview
+
+    - title: Development
+      url: /docs/2.1/ingest/development
+
+    - title: Administration
+      url: /docs/2.1/ingest/administration
+
+    - title: Configuration
+      url: /docs/2.1/ingest/configuration
+
+  - title: Query
+    folderitems:
+
+    - title: Overview
+      url: /docs/2.1/query/overview
 
     - title: Query Syntax
-      url: /docs/2.1/getting-started/query-syntax
+      url: /docs/2.1/query/syntax
 
-  - title: Administration
-    folderitems:
+    - title: Development
+      url: /docs/2.1/query/development
 
-    - title: Administration Overview
-      url: /docs/2.1/administration/overview
+    - title: Administration
+      url: /docs/2.1/query/administration
 
-      subfolders:
-      - title: Ingest Services Administration
-        subfolderitems:
-
-        - title: Basic Administrative Tasks
-          url: /docs/2.1/administration/ingest-basics
-
-        - title: Configuring Ingest Services
-          url: /docs/2.1/administration/ingest-config
-
-        - title: Logging Configuration
-          url: /docs/2.1/administration/ingest-logging
-
-      - title: Web Services Administration
-        subfolderitems:
-
-        - title: Basic Administrative Tasks
-          url: /docs/2.1/administration/web-basics
-
-        - title: Configuring Web Services
-          url: /docs/2.1/administration/web-config
-
-        - title: Logging Configuration
-          url: /docs/2.1/administration/web-logging
-
-  - title: Development
-    folderitems:
-
-    - title: Environment Setup
-      url: /docs/2.1/development/environment
-
-    - title: Query API Development
-      url: /docs/2.1/development/query-api
-
-    - title: Ingest API Development
-      url: /docs/2.1/development/ingest-api
+    - title: Configuration
+      url: /docs/2.1/query/configuration
