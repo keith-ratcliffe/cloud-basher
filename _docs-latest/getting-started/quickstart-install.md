@@ -3,10 +3,12 @@ title: "Quickstart Installation"
 tags: [getting_started]
 toc: false
 summary: |
-  <p>The DataWave Quickstart provides setup and tear-down automation for DataWave, Hadoop, Accumulo, ZooKeeper, and Wildfly,
-  and it provides several <a href="quickstart-reference">utility functions</a> to streamline your interactions
-  with DataWave's ingest and query components.</p><p>The steps below will setup a standalone DataWave instance, which you may use
-  for your own development needs and to follow along with the <a href="../tour/getting-started">DataWave Tour</a></p>
+  <p>This quickstart provides a standalone DataWave instance that you may use to follow along with the
+  <a href="../tour/getting-started">guided tour</a>. It is also generally useful as a development tool, as it provides a
+  consistent, repeatable process for deploying and testing DataWave locally.</p>
+  <p>The quickstart provides setup and tear-down automation for DataWave, Hadoop, Accumulo, ZooKeeper, and Wildfly,
+  and it includes many <a href="quickstart-reference">utility functions</a>, which will streamline most of your interactions
+  with these services.</p>
 ---
 
 ## Before You Start
@@ -58,7 +60,7 @@ To keep things simple, **DataWave**, **Hadoop**, **Accumulo**, **ZooKeeper**, an
 
 <div markdown="span" class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> <b>Caution</b> If
 you currently have any of the above installed locally under *any* user account,
-you should verify they are stopped/disabled before proceeding
+you should ensure that all are stopped/disabled before proceeding
 </div>
 
 ### STEP 1
@@ -74,25 +76,24 @@ bash sessions.
 
 The *[env.sh][dw_blob_env_sh]* script is a wrapper that bootstraps each service in turn by sourcing its
 respective *{servicename}/boostrap.sh* script. These scripts define supporting bash variables and functions,
-encapsulating both the configuration and the functionality of each service in a consistent manner.
+encapsulating configuration and functionality consistently for all services.
 
 
 #### Override Default Binaries
 
-If needed, you may override the version of the binary that gets installed for a particular service. For
-example, you may want to use your own locally-built binaries for Hadoop. Or you may simply want to test with a newer
-version of a given service. Before proceeding with the install, override the desired *DW_\*_DIST_URI* value
-as shown below...
+To override the quickstart's default version of a particular binary, simply override the desired *DW_\*_DIST_URI* value
+as shown below. URIs may be local or remote. Local file URI values must be prefixed with *file://*
+
 ```bash
   $ vi ~/.bashrc
      ...
   
-     export DW_ACCUMULO_DIST_URI=http://favorite.apache.mirror/accumulo/1.8/accumulo-1.8.X-bin.tar.gz
-     export DW_JAVA_DIST_URI=file:///my/local/binaries/jdk-8-linux-x64.tar.gz
-     export DW_MAVEN_DIST_URI=file:///my/local/binaries/apache-maven-3.X.tar.gz
-     export DW_HADOOP_DIST_URI=file:///my/local/binaries/hadoop-2.6.0-cdh5.9.1.tar.gz
-     export DW_ZOOKEEPER_DIST_URI=file:///my/local/binaries/zookeeper-3.4.5-cdh5.9.1.tar.gz
-     export DW_WILDFLY_DIST_URI=file:///my/local/binaries/wildfly-10.X.tar.gz
+     export DW_HADOOP_DIST_URI=file:///my/local/binaries/hadoop-x.y.z.tar.gz
+     export DW_ACCUMULO_DIST_URI=http://some.apache.mirror/accumulo/1.x/accumulo-1.x-bin.tar.gz
+     export DW_ZOOKEEPER_DIST_URI=http://some.apache.mirror/zookeeper/x.y/zookeeper-x.y.z.tar.gz
+     export DW_WILDFLY_DIST_URI=file:///my/local/binaries/wildfly-10.x.tar.gz
+     export DW_JAVA_DIST_URI=file:///my/local/binaries/jdk-8-update-x.tar.gz
+     export DW_MAVEN_DIST_URI=file:///my/local/binaries/apache-maven-x.y.z.tar.gz
 
      source DW_HOME/contrib/datawave-quickstart/bin/env.sh     # Added by Step 1
 

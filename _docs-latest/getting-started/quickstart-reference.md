@@ -30,7 +30,7 @@ These service names are also valid...
 
 ---
 
-## Utility Bootstrap Functions
+## Global Bootstrap Functions
 
 The functions below are implemented in [bin/common.sh][dw_blob_common_sh]
 
@@ -116,7 +116,7 @@ A few noteworthy functions and their descriptions are listed by category below (
 | Implementation: [bootstrap-ingest.sh][dw_blob_datawave_bootstrap_ingest_json] |
 
 | `datawaveIngestWikipedia /path/to/some/enwiki.xml` |
-| Kick off M/R job to ingest a raw Wikipedia XML file. Any standard enwiki-flavored file should suffice |
+| Kick off M/R job to ingest a raw Wikipedia XML file. Any standard *enwiki*-flavored file should suffice |
 | Ingest config file: [wikipedia-ingest-config.xml][dw_blob_mywikipedia_config] |
 | File ingested automatically by the DataWave Ingest installer (install-ingest.sh): [enwiki-20130305*.xml][dw_blob_enwiki_raw_xml] |
 | Implementation: [bootstrap-ingest.sh][dw_blob_datawave_bootstrap_ingest_wiki] |
@@ -141,7 +141,8 @@ A few noteworthy functions and their descriptions are listed by category below (
 
 ## PKI Notes
     
-In the quickstart environment, DataWave Web is PKI enabled by default. The following self-signed materials are used
+In the quickstart environment, DataWave Web is PKI enabled and uses two-way authentication by default. Moreover, the following
+self-signed materials are used...
 
 | File Name | Type | Description |
 |----------:|------|------------ |
@@ -155,7 +156,7 @@ In the quickstart environment, DataWave Web is PKI enabled by default. The follo
 
 * The goal of the quickstart's PKI setup is to demonstrate DataWave's ability to be integrated easily into an organization's existing
   private key infrastructure and user auth services. See [datawave/bootstrap-user.sh][dw_blob_datawave_bootstrap_user]
-  for more information on configuration of the test user's roles and associated Accumulo authorizations
+  for more information on configuring the test user's roles and associated Accumulo authorizations
 
 * To test with your own certificate materials, override the keystore &amp; truststore variables from [datawave/bootstrap.sh][dw_blob_datawave_bootstrap_pki]
   within your *~/.bashrc* prior to [installing the quickstart](quickstart-install)
