@@ -23,18 +23,21 @@ are described below.
 
 ## Live Ingest
 
-A DataWave ingest job configured for *live* mode is a map-only job in which the map tasks use Accumulo *BatchWriter*
+A DataWave ingest job configured for *live* mode is a *map*-only job in which the *map* tasks use Accumulo *BatchWriter*
 instances to write keys/values directly to DataWave's [tables](../getting-started/data-model) and directly into *tserver*
-memory. Thus, *live* mode provides the least amount of latency from the user's perspective, as the new data is made
-available for query without first having to write it to disk. However, the *tservers* must eventually write out the key/value
-paris to the distributed file system -- consuming CPU, memory and other resources that would have otherwise been available
-to service users' queries.
+memory.
+
+Thus, *live* mode provides the least amount of latency from the user's perspective, as the new data is made
+available for query without first having to write it to disk. However, Accumulo must eventually write out the data
+to the distributed file system, which will consume CPU, memory and other resources, thus decreasing the resources available
+to service users' queries during that time.
 
 ## Bulk Ingest
 
 In contrast to *live* mode, DataWave ingest jobs configured to operate in *bulk* mode use the *reduce* phase to write out
-DataWave key/value pairs to the distributed file system in Accumulo's *RFile* format. Accumulo's bulk import feature can then
-be employed to bring a large volume of *RFiles* online all at once, with little overhead required on the part of the *tservers*.
+DataWave key/value pairs to the distributed file system in Accumulo's *RFile* format. Accumulo's *bulk import* feature can then
+be employed to bring a large volume of *RFiles* online all at once, with little overhead required on the part of Accumulo.
+
 Generally, this allows for greater overall ingest throughput and prioritizes system resources for user queries, but at
 the cost of increased latency for users who may be waiting for the very latest data.
 

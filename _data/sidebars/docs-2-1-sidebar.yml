@@ -1,20 +1,19 @@
-# This file is used to construct the 'docs' sidebar for DataWave 2.1. Note that if the sidebar 'version' below
-# matches that of site.latest_minor_release (in _config.yml), then _includes/sidebar.html will append "(Latest)" to the
-# sidebar heading for us automatically
+# This file is used to construct the sidebar navigation for DataWave 2.1 docs.
 
 # General sidebar notes...
 
-# The goal here is to have sidebar setup for our various collection types, and for our various versions of DataWave
-# docs, be dynamic and data-driven rather than static-html-driven.
+# The goal here is to have sidebar setup for our various pages and collection types be dynamic and data-driven.
 
-# Using the Navgoco jQuery component as its basis, the sidebar code in _includes/sidebar.html will build the
-# accordion-style menu using the data provided below.
+# The selection of a particular sidebar for each web page is typically defaulted in _config.yml based on the page's
+# collection type. However, the sidebar may be overridden, if needed, in the frontmatter section of the given
+# page/post/doc/etc
 
-# The code supports nesting up to 2 levels deep...could easily support more, but it probably impedes usability to
-# exceed 2 levels of nesting
+# The code in _includes/sidebar.html will build an accordion-style menu using the data provided below for any page
+# having its "sidebar" property set to "docs-2-1-sidebar"
 
-# Note that sidebar selection for each web page is typically defaulted in _config.yml based on the page's collection type.
-# However, the sidebar may be overridden, if needed, in the frontmatter section of the given page/post/doc/etc
+# Note that if the sidebar 'version' below matches that of site.latest_minor_release (in _config.yml), then certain
+# layouts and behaviors will react accordingly, e.g., _includes/sidebar.html will append "(Latest)" to the sidebar
+# heading, etc
 
 entries:
 - title: sidebar

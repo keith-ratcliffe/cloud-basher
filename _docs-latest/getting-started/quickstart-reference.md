@@ -6,9 +6,9 @@ summary: This page provides reference material for the DataWave Quickstart
 
 ## Service Bootstrap Functions
 
-The functions below are implemented in *bin/services/{servicename}/bootstrap.sh*, where *{servicename}* is one of 
+The functions below are implemented for all services, where {*servicename*} can be one of...
 
-**hadoop** \| **accumulo** \| **datawave**  
+**hadoop** \| **accumulo**, *zookeeper* \| **datawave**, *datawaveWeb*, *datawaveIngest*
 
 | Function Name&nbsp;&nbsp;&nbsp; | Description |
 |----------------:|:------------- |
@@ -21,12 +21,6 @@ The functions below are implemented in *bin/services/{servicename}/bootstrap.sh*
 | ` {servicename}IsInstalled ` | Returns 0 if installed, non-zero otherwise. Mostly for internal use |
 | ` {servicename}Printenv ` | Display current state of the service configuration, bash variables, etc |
 | ` {servicename}PidList ` | Display all service PIDs on a single line, space-delimited |
-
-These service names are also valid...
-
-- **zookeeper**: managed by the *accumulo* service bootstrap
-- **datawaveWeb**: managed by the *datawave* service bootstrap
-- **datawaveIngest**: managed by the *datawave* service bootstrap
 
 ---
 
@@ -98,7 +92,7 @@ A few noteworthy functions and their descriptions are listed by category below (
 
 | `datawaveQuery --query <query-expression>` |
 | Submit queries on demand and inspect results. Use the `--help` flag for information on query options | 
-| [Query expression syntax guidance](query-syntax) |
+| Query syntax guidance is [here](../query/syntax) |
 | Implementation: [query.sh][dw_blob_query_sh_query_func] |
 
 | `datawaveWebTest` |

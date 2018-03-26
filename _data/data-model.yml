@@ -1,0 +1,136 @@
+# Data model terms. Make sure 'id' is unique within the set of terms,
+# and try to keep terms sorted by 'id' just for easier maintenance
+
+terms:
+  - id: CF
+    name: Column Family
+    info: The portion of the Accumulo key representing the column family
+
+  - id: CQ
+    name: Column Qualifier
+    info: The portion of the Accumulo key representing the column qualifier
+
+  - id: D
+    name: Document CF String
+    info: Column family for document content. Literal string with the value of 'd'
+
+  - id: DC
+    name: Document Content
+    info: Accumulo value containing document content for the 'd' column. Gzip compressed, then base64 encoded
+
+  - id: DO
+    name: Data Object
+    info: A real-life object for which field names and field values can be derived
+
+  - id: DT
+    name: Data Type
+    info: An identifier that describes some category or facet of the Data Object
+
+  - id: DVN
+    name: Document View Name
+    info: Identifier within the 'd' column qualifier, which categorizes the content
+
+  - id: FI
+    name: Field Index CF String
+    info: A column family prefix for field index keys. Literal string with the value of 'fi'
+
+  - id: FN
+    name: Field Name
+    info: The name of a field in a Data Object
+
+  - id: FV
+    name: Field Value
+    info: The raw value associated with a particular Field Name
+
+  - id: N
+    name: Normalizer
+    info: An object that transforms data so that it can be sorted lexicographically
+
+  - id: NB
+    name: Null Byte String
+    info: A string with the value of '\0', used as a delimiter within an Accumulo key
+
+  - id: NCN
+    name: Normalizer Class Name
+    info: The fully qualified name of the Normalizer class
+
+  - id: NFN
+    name: Normalized Field Name
+    info: A Field Name transformed to be compatible with the query code
+
+  - id: NFV
+    name: Normalized Field Value
+    info: A Field Value that has been processed/transformed by a Normalizer
+
+  - id: NT
+    name: Normalized Term
+    info: A term in a document transformed to be compatible with the query code
+
+  - id: PB
+    name: Protocol Buffer
+    info: Google Protocol Buffer
+
+  - id: SHARD
+    name: Shard ID
+    info: The partition identifier in the form of YYYYMMDD_N
+
+  - id: TF
+    name: Term Frequency CF String
+    info: A column family prefix for term frequency keys. Literal string with the value of 'tf'
+
+  - id: UID
+    name: Unique Identifier
+    info: An internal object identifier generated from the data object, should be deterministic and unique within a partition and Data Type
+
+  - id: UL
+    name: Uid.List
+    info: A protocol buffer object that contains the number of occurrences of a Field Name / Field Value pair with a bounded list of UIDs
+
+  - id: VERT
+    name: Vertex
+    info: A single node within a graph
+
+tables:
+  - id: PDT
+    name: Primary Data Table
+    info: Accumulo table where Data Objects are stored
+    entries:
+    - row: SHARD
+      cf: DT + NB + UID
+      cq: NFN + NB + FV
+      val: "NULL"
+
+    - row: SHARD
+      cf: FI + NB + NFN
+      cq: NFV + NB + DT + NB + UID
+      val: "NULL"
+
+    - row: SHARD
+      cf: D
+      cq: DT + NB + UID + NB + DVN
+      val: DC
+
+    - row: SHARD
+      cf: TF
+      cq: DT + NB + UID + NT + NFN
+      val: PB
+
+  - id: GFIDX
+    name: Global Forward Index Table
+    info: Accumulo table where forward indexed Field Values from the Primary Data Table are stored
+    entries:
+
+  - id: GRIDX
+    name: Global Reverse Index Table
+    info: Accumulo table where reverse indexed Field Values from the Primary Data Table are stored
+    entries:
+
+  - id: GMETA
+    name: Global Metadata Table
+    info: Accumulo table where edge keys, consisting of a pair of Field Value vertices, are stored
+    entries:
+
+  - id: EDGE
+    name: Edge Table
+    info: Accumulo table where edge keys, consisting of a pair of Field Value vertices, are stored
+    entries:

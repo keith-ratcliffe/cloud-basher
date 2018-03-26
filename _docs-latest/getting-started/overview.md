@@ -5,7 +5,7 @@ toc: false
 ---
 ## Use Cases
 
-The DataWave project provides a general purpose framework which facilitates persistence, indexing
+The DataWave project provides a general purpose framework that facilitates persistence, indexing
 and retrieval of both structured and unstructured textual objects. Central to DataWave's design is that it leverages
 [Apache Accumulo][apache_accumulo] to implement a flexible [data model](data-model) and to implement [ingest](../ingest/overview)
 and [query](../query/overview) components that are robust and scalable.
@@ -25,9 +25,8 @@ infrastructure.
 
 DataWave is written in Java and its core services are built upon an extensible software architecture. Its primary components
 are its [ingest](../ingest/overview) and [query](../query/overview) frameworks. Both were designed to support a high degree
-of customization through highly configurable application components and through extensible software interfaces. 
-For demonstrations of these features, checkout the [quickstart install](quickstart-install) and the
-[guided tour](../tour/getting-started). 
+of customization, through highly configurable application components and through extensible software interfaces.
+To get started, check out the [quickstart install](quickstart-install) and the [guided tour](../tour/getting-started) docs.
 
 ---
 

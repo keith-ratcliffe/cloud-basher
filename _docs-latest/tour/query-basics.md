@@ -45,12 +45,12 @@ For help with query syntax, view the [guide](../query/syntax).
 
 <div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Most query
 examples in the guided tour will utilize the quickstart's
-**datawaveQuery** [function](../getting-started/quickstart-reference#datawave-web-functions). It provides a curl-based
+**[datawaveQuery](../getting-started/quickstart-reference#datawave-web-functions)** function. It provides a curl-based
 client that streamlines your interactions with the Query API and sets reasonable defaults for most parameters.
 Query parameters can also be easily added and/or overridden.
 <br/><br/>Use **`datawaveQuery --help`** for assistance<br/><br/>
 More importantly, in order to demonstrate Query API usage, each example below will display the key aspects of 
-actual curl command used and also display the web service response 
+the actual curl command used and also display the web service response
 </div>
 
 <ul id="profileTabs" class="nav nav-tabs">
@@ -68,7 +68,7 @@ Initializes server-side resources and responds with a unique ID for the query
 
 ```bash
  # Quickstart client command...
- 
+
  $ datawaveQuery --verbose \                       # To output the actual curl command used
     --create-only \                                # For /create endpoint. Default is /createAndNext
     --logic EventQuery \                           # Query logic identifier for the path parameter
@@ -76,7 +76,7 @@ Initializes server-side resources and responds with a unique ID for the query
     --query " GENRES:action OR GENRES:adv* "
  
  # Curl command (abbreviated)...
- 
+
  $ /usr/bin/curl -X POST https://localhost:8443/DataWave/Query/EventQuery/create \
  ... \ 
  -d pagesize=10 \                                  # Max results to return per page
@@ -88,7 +88,6 @@ Initializes server-side resources and responds with a unique ID for the query
  -d query.syntax=LUCENE                            # Syntax identifier
  
  # Web service response...
- 
  {
    "HasResults": true,
    "OperationTimeMS": 70,
