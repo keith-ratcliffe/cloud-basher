@@ -1,0 +1,40 @@
+<table>
+  <caption>Ingest Processing Errors Schema</caption>
+  <thead><tr><th>Row</th><th>Column&nbsp;Family</th><th>Column&nbsp;Qualifier</th><th>Value</th><th>Purpose</th></tr></thead>
+  <tbody>
+
+  {% assign tables = site.data.data-model.tables | where:"id","IPET" %}
+
+  {% for entry in tables[0].entries %}
+  <tr>
+    {% for i in (1..4) %}
+    {% if i == 1 %}
+    {% assign td_raw = entry.row %}
+    {% elsif i == 2 %}
+    {% assign td_raw = entry.cf %}
+    {% elsif i == 3 %}
+    {% assign td_raw = entry.cq %}
+    {% elsif i == 4 %}
+    {% assign td_raw = entry.val %}
+    {% endif %}
+
+    {% assign terms = td_raw | split: '+' %}
+    <td>
+      {% for term in terms %}
+      {% assign strip_term = term | strip %}
+      {% assign dictionary_entry = site.data.data-model.terms | where:"id",strip_term %}
+      <a href="#terms-and-definitions" data-toggle="tooltip" data-original-title="{{ dictionary_entry[0].name }} :: {{ dictionary_entry[0].info }}">{{ strip_term }}</a>
+      {% unless forloop.last %}
+      &nbsp;+
+      {% endunless %}
+      {% endfor %}
+    </td>
+    {% endfor %}
+    <td>
+      {{ entry.purpose }}
+    </td>
+  </tr>
+  {% endfor %}
+
+  </tbody>
+</table>

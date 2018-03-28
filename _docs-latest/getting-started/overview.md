@@ -3,7 +3,8 @@ title: DataWave Overview
 tags: [getting_started, architecture]
 toc: false
 ---
-## Use Cases
+
+## Introduction
 
 The DataWave project provides a general purpose framework that facilitates persistence, indexing
 and retrieval of both structured and unstructured textual objects. Central to DataWave's design is that it leverages

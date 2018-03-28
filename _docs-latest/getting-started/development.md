@@ -122,7 +122,7 @@ The **read-properties** config and **dev** profile below (from *DW_HOME/pom.xml*
 
 ### Custom Configurations
 
-So, to customize the configuration for a specific deployment environment, simply override any properties that you want
+To customize the configuration for a specific deployment environment, simply override any properties that you want
 to customize in your local *~/.m2/datawave/properties/\*.properties* file(s) for the Maven profile in question. Or create
 a new Maven profile along with a new set of \*.properties files for the targeted environment.
 
