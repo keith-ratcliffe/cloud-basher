@@ -1,9 +1,5 @@
 /*
    This license pertains to the Jekyll theme @ https://github.com/tomjoht/documentation-theme-jekyll
-
-   The features that we've retained from the above theme are primarily....
-      - Data-driven 'topnav' and navgoco 'sidebar' integration
-      - Auto-TOC feature (used by our _docs* collections)
 */
 
 The MIT License (MIT)

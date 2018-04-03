@@ -1,7 +1,7 @@
 ---
-title: "Data Model"
+title: "DataWave Data Model"
 tags: [getting_started, data_model, ingest, query]
-summary: To facilitate storage, indexing, and retrieval, DataWave organizes data within Accumulo tables as described below
+summary: DataWave utilizes the Accumulo tables schemas described below to implement its
 ---
 
 ## Primary Data Table
@@ -30,10 +30,10 @@ locality group.
 ## Global Index Tables
 
 The *forward* and *reverse* index tables serve as global indexes mapping terms to partitions. The index maps a
-*NFN:NFV* pair to a category of data within the partitions of the primary data table. The *Uid.List (UL)* object contains
-the number of occurrences of the *NFN:NFV* pair in a category of data in the partition. Additionally, the *UL* may contain
+*NFN:NFV* pair to a category of data within the partitions of the primary data table. The *Uid.List Protocol Buffer (ULPB)* object contains
+the number of occurrences of the *NFN:NFV* pair in a category of data in the partition. Additionally, the *ULPB* may contain
 the UIDs of the objects that contain the *NFN:NFV*. We say “may contain” because there is an upper limit on the number of
-UIDs in the *UL*.
+UIDs in the *ULPB*.
 
 {% include table_index_fwd.html %}
 
@@ -72,40 +72,40 @@ value encoded into the Data Table's *Shard ID*
 ## Load Dates Table
 
 The load dates table tracks the dates on which specific field names were loaded into specific tables via DataWave Ingest.
-This information may be leveraged internally for the purposes of query optimization, load date-based filtering for queries, etc.
+This information may be leveraged internally for the purposes of query optimization, load date-based filtering for queries,
+etc.
 
 {% include table_load_dates.html %}
 
 ## Other Tables
 
+### Ingest Error Tables
+
+The layouts associated with the four ingest error tables are identical to those listed above for the *Primary Data Table*,
+*Global Index Tables*, and *Data Dictionary Table*. The only difference is that the respective error tables here are meant
+to capture *Data Objects* that failed to be fully loaded during ingest due to one or more processing errors.
+
+Thus, these tables are intended to capture any successfully-processed NFN:FV pairs, just as they would have appeared in
+the normal schema, along with additional NFN keys related to the errors themselves, so that error discovery and
+troubleshooting can proceed as efficiently as possible. Since schema descriptions for the primary data tables apply here
+as well, we describe below only the specific *Data Object* entries that are used to convey information about the error(s)
+
+{% include table_ingest_errors.html %}
+
 ### Query Metrics Tables
 
-The schemas associated with the four query metrics tables are identical to those listed above for the *Primary Data Table*,
-*Global Index Tables*, and *Data Dictionary Table*, in terms of the structure of keys and values. The only difference 
-here is that the respective query metrics tables are intended to persist information associated with user queries
-exclusively. They can be leveraged by users to gain insight into their own queries, and by administrators to gain insights
-into all active and historical queries on the system. Since schema descriptions for the primary data tables apply here
-as well, we describe below only the specific NFN and FV components that are used to represent a query *Data Object*.
+The layouts associated with the four query metrics tables are identical to those listed above for the *Primary Data Table*,
+*Global Index Tables*, and *Data Dictionary Table*. The only difference here is that the respective query metrics tables
+are intended to persist information associated with user queries exclusively. They can be leveraged by users to gain insight
+into their own queries, and by administrators to gain insight into active and historical queries. Since schema descriptions
+for the primary data tables apply here as well, we describe below only the specific NFN and FV components that are used to
+represent a query *Data Object*.
 
 **Note**: The *Data Type (DT)* portion of all respective keys is denoted by the literal **querymetrics**
 
 **Note**: The *YYYYMMDD* value that is created for the *Shard ID* partition identifies the creation date of the query
 
 {% include table_query_metrics.html %}
-
-### Ingest Error Tables
-
-The schemas associated with the four ingest error tables are identical to those listed above for the *Primary Data Table*,
-*Global Index Tables*, and *Data Dictionary Table*, in terms of the structure of keys and values. The only difference is
-that the respective error tables here are meant to capture *Data Objects* that failed to be fully loaded
-during ingest due to one or more processing errors.
-
-Thus, these tables are intended to capture any successfully-processed NFN:FV pairs, just as they would have appeared in 
-the normal schema, along with additional NFN keys related to the errors themselves, so that error discovery and 
-troubleshooting can proceed as efficiently as possible. Since schema descriptions for the primary data tables apply here
-as well, we describe below only the specific *Data Object* entries that are used to convey information about the error(s)
-
-{% include table_ingest_errors.html %}
 
 ## Terms and Definitions
 

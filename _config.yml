@@ -139,3 +139,5 @@ description: "DataWave is a Java-based ingest and query framework that leverages
 
 whitelist: [jekyll-redirect-from]
 plugins: [jekyll-redirect-from]
+
+exclude: [README.md]

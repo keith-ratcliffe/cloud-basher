@@ -3,209 +3,107 @@ title: "DataWave Tour: Ingest Basics"
 layout: tour
 tags: [getting_started, ingest]
 summary: |
-  The examples below will demonstrate usage of DataWave's Ingest API. In order to follow along in your own DataWave
+  The examples below will demonstrate DataWave Ingest usage. In order to follow along in your own DataWave
   environment, you should first complete the <a href="../getting-started/quickstart-install">Quickstart Installation</a>
 ---
 
-## A Simple Query Example
+## Configuration Basics
 
-DataWave creates and maintains a data dictionary
-([https://localhost:8443/DataWave/DataDictionary](https://localhost:8443/DataWave/DataDictionary)) of known data types
-and their associated field names. A typical DataWave query expression will leverage one or more of these field names to
-find data of interest.
+DataWave Ingest is highly configuration-driven. Below we'll demonstrate the basic configuration concepts using
+DataWave's example **tvmaze** data type.
 
-Here, we'll construct a simple query that uses the *GENRES* field from our *tvmaze* data type to find TV shows in the
-action and adventure genres.
-
-<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b>
-The data for this example originated from [tvmaze.com/api](http://tvmaze.com/api), and the file that we ingested automatically
-during the quickstart setup is [here](https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-json/src/test/resources/input/tvmaze-api.json).
-For more information, view the [datawaveIngestJson](../getting-started/quickstart-reference#datawave-ingest-functions)
-function documentation
-</div>
-
-### The Query Expression
-
-DataWave accepts query expressions in either JEXL or Lucene syntax as shown below.
-
-<div class="row">
-  <div class="col-md-6">
-       <h4>Lucene</h4>
-       <pre>GENRES:action OR GENRES:adv*</pre>
-  </div>
-  <div class="col-md-6">
-       <h4>JEXL</h4>
-       <pre>GENRES == 'action' || GENRES =~ 'adv.*'</pre>
-  </div>
-</div>
-
-For help with query syntax, view the [guide](../query/syntax).
-
-## Using the Query API
-
-<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Most query
-examples in the guided tour will utilize the quickstart's
-**datawaveQuery** [function](../getting-started/quickstart-reference#datawave-web-functions). It provides a curl-based
-client that streamlines your interactions with the Query API and sets reasonable defaults for most parameters.
-Query parameters can also be easily added and/or overridden.
-<br/><br/>Use **`datawaveQuery --help`** for assistance<br/><br/>
-More importantly, in order to demonstrate Query API usage, each example below will display the key aspects of
-actual curl command used and also display the web service response
-</div>
+{% include tvmaze-quickstart-note.html %}
 
 <ul id="profileTabs" class="nav nav-tabs">
-    <li class="active"><a class="noCrossRef" href="#create-query" data-toggle="tab">1: Create the Query</a></li>
-    <li><a class="noCrossRef" href="#get-results" data-toggle="tab">2: Fetch Paged Results</a></li>
-    <li><a class="noCrossRef" href="#close-query" data-toggle="tab">3: Close the Query</a></li>
+    <li class="active"><a class="noCrossRef" href="#define-type" data-toggle="tab">1: Define the Data Type</a></li>
+    <li><a class="noCrossRef" href="#register-type" data-toggle="tab">2: Register the Data Type</a></li>
+    <li><a class="noCrossRef" href="#ingest-data" data-toggle="tab">3: Ingest Some Data</a></li>
 </ul>
 <div class="tab-content">
-<div role="tabpanel" class="tab-pane active" id="create-query" markdown="1">
-### Step 1: Create the Query
+<div role="tabpanel" class="tab-pane active" id="define-type" markdown="1">
+### Step 1: Define the 'tvmaze' Data Type
 
-DataWave/Query/{ query-logic }/create (*POST*)
+The example config, [myjson-ingest-config.xml][dw_blob_myjson_config], defines the **tvmaze** data type.
 
-Initializes server-side resources and responds with a unique ID for the query
+**Deploy directory**: $DATAWAVE_INGEST_HOME/config/
 
-```bash
- # Quickstart client command...
+```xml
+<configuration>
 
- $ datawaveQuery --verbose \                       # To output the actual curl command used
-    --create-only \                                # For /create endpoint. Default is /createAndNext
-    --logic EventQuery \                           # Query logic identifier for the path parameter
-    --syntax LUCENE \                              # To use JEXL: --syntax JEXL
-    --query " GENRES:action OR GENRES:adv* "
+    <property>
+        <name>data.name</name>
+        <value>myjson</value>
+        <description>
+            This is the name of the data type, which distinguishes it
+            internally from other defined types for the purposes of
+            ingest processing. Must be unique.
+        </description>
+    </property>
 
- # Curl command (abbreviated)...
+    <property>
+        <name>myjson.output.name</name>
+        <value>tvmaze</value>
+        <description>
+            This is the name to use on the data in Accumulo. Does not have to
+            be unique. This will be the name known to DataWave Query clients.
+        </description>
+    </property>
 
- $ /usr/bin/curl -X POST https://localhost:8443/DataWave/Query/EventQuery/create \
- ... \
- -d pagesize=10 \                                  # Max results to return per page
- -d auths=BAR,FOO,PRIVATE,PUBLIC \                 # Accumulo auths to enable for user
- -d begin=19700101 -d end=20990101 \               # Date range filter
- -d queryName=Query_20180312121809 \               # Query name that's meaningful to user
- -d columnVisibility=BAR%26FOO \                   # Viz expression to use for query logging, etc.
- -d query=GENRES%3Aaction%20OR%20GENRES%3Aadv%2A \ # Query expression, URL-encoded
- -d query.syntax=LUCENE                            # Syntax identifier
+    <property>
+        <name>file.input.format</name>
+        <value>datawave.ingest.json.mr.input.JsonInputFormat</value>
+        <description>
+            Hadoop MapReduce InputFormat implementation
+        </description>
+    </property>
 
- # Web service response...
+    <property>
+        <name>myjson.reader.class</name>
+        <value>datawave.ingest.json.mr.input.JsonRecordReader</value>
+        <description>
+            Implements Hadoop MapReduce RecordReader and other DataWave-specific
+            interfaces in order to present raw data objects (e.g., TV shows) to
+            datawave.ingest.mapreduce.EventMapper as input
+        </description>
+    </property>
 
- {
-   "HasResults": true,
-   "OperationTimeMS": 70,
-   "Result": "758b6e03-4eb0-4923-b098-c161f0cb322d"
- }
+    <property>
+        <name>myjson.ingest.helper.class</name>
+        <value>datawave.ingest.json.config.helper.JsonIngestHelper</value>
+        <description>
+            Implements datawave.ingest.data.config.ingest.IngestHelperInterface,
+            which knows how to parse field name/value pairs from a data object
+            (e.g., a TV show)
+        </description>
+    </property>
 
-```
-</div>
-<div role="tabpanel" class="tab-pane" id="get-results" markdown="1">
-### Step 2: Fetch Paged Results
+    <property>
+        <name>myjson.handler.classes</name>
+        <value>datawave.ingest.json.mr.handler.ContentJsonColumnBasedHandler</value>
+        <description>
+            Comma-delimited list of classes that will process each data object in order
+            to produce Accumulo key/value pairs in accordance with DataWave's data model
+        </description>
+    </property>
 
-DataWave/Query/{ query-id }/next (*GET*)
+    ...
+    ...
 
-Repeat this step until all pages have been returned, indicated by HTTP status code 204
-
-```bash
- # Quickstart client command...
-
- $ datawaveQuery --verbose --next 758b6e03-4eb0-4923-b098-c161f0cb322d
-
- # Curl command (abbreviated)...
-
- $ /usr/bin/curl ... \
-   -X GET https://localhost:8443/DataWave/Query/758b6e03-4eb0-4923-b098-c161f0cb322d/next
-
- # Web service response (abbreviated)...
-
- {
-   "Events": [
-     # Record 1 of N...
-     {
-       "Fields": [
-          # Field name/value data for record 1 (omitted)
-       ],
-       # Record-level security markings for record 1...
-       "Markings": {
-         "entry": [
-           { "key": "columnVisibility", "value": "PRIVATE|(BAR&FOO)" }
-         ]
-       },
-       # Database metadata for record 1...
-       "Metadata": {
-         "DataType": "tvmaze",
-         "InternalId": "-27cfzr.phrhgm.-jax0u1",
-         "Row": "20180305_0",
-         "Table": "shard"
-       }
-     },
-     ... # Records 2 thru N omitted...
-   ],
-   # Listing of all field names returned by the query (most omitted here)
-   "Fields": [
-       ...
-       "EXTERNALS_IMDB",
-       "EXTERNALS_THETVDB",
-       "EXTERNALS_TVRAGE",
-       "GENRES",
-       "ID",
-       "LOAD_DATE",
-       "NAME",
-       "NETWORK_ID",
-       "NETWORK_NAME",
-       "OFFICIALSITE",
-       "PREMIERED",
-       "RECORD_ID",
-       "RUNTIME",
-       "SCHEDULE_TIME",
-       "STATUS",
-       "SUMMARY",
-       ...
-     ],
-     "HasResults": true,
-     "LogicName": "EventQuery",
-     "OperationTimeMS": 229,
-     "PageNumber": 1,
-     "PartialResults": false,
-     "QueryId": "758b6e03-4eb0-4923-b098-c161f0cb322d",
-     "ReturnedEvents": N
- }
+</configuration>
 
 ```
 </div>
-<div role="tabpanel" class="tab-pane" id="close-query" markdown="1">
-### Step 3: Close the Query
+<div role="tabpanel" class="tab-pane" id="register-type" markdown="1">
+### Step 2: Register the 'tvmaze' Data Type
 
-DataWave/Query/{ query-id }/close (*PUT*)
+```xml
 
-Release any server-side resources (*datawaveQuery* client may have already done this for you automatically)
+```
+</div>
+<div role="tabpanel" class="tab-pane" id="ingest-data" markdown="1">
+### Step 3: Ingest New 'tvmaze' Data
 
 ```bash
- # Quickstart client command...
-
- $ datawaveQuery --verbose --close 758b6e03-4eb0-4923-b098-c161f0cb322d
-
- # Curl command (abbreviated)...
-
- $ /usr/bin/curl ... \
-   -X PUT https://localhost:8443/DataWave/Query/758b6e03-4eb0-4923-b098-c161f0cb322d/close
-
- # Web service response...
-
- <?xml version="1.0"?>
- <html>
-   <head>
-     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-     <title>DATAWAVE - Void Response</title>
-     <link rel="stylesheet" type="text/css" href="/screen.css" media="screen"/>
-   </head>
-   <body>
-     <h1>datawave.webservice.result.VoidResponse</h1>
-     <div>
-        <b>MESSAGES:</b><br/>
-        758b6e03-4eb0-4923-b098-c161f0cb322d closed.<br/>
-        <b>EXCEPTIONS:</b><br/>
-     </div>
-   </body>
- </html>
 
 ```
 </div>
@@ -243,3 +141,5 @@ In **Step 3**, to release server-side resources, we invoked *DataWave/Query/{ qu
 * Production query clients should be designed to automatically invoke *close* when *next* has no more results (as
   indicated by HTTP status code *204*), and also when the client encounters an unrecoverable error anytime after
   query creation
+
+[dw_blob_myjson_config]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/myjson-ingest-config.xml

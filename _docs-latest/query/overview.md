@@ -8,23 +8,20 @@ toc: false
 
 The design of DataWave Query is predicated in large part upon [Java Expression Language (JEXL)][jexl]. JEXL serves two
 key roles within the query framework. First, JEXL is used as the basis for DataWave's [query language](syntax). Thus, it
-plays a central role within client requests to retrieve data of interest. Secondly, JEXL is utilized within DataWave internals
-to drive query execution. That is, DataWave Query leverages JEXL libraries to harness a variety of custom and stock
-[Accumulo Iterators][acc_iterators] to facilitate query evaluation and object retrieval for the text objects that reside
-in DataWave's [tables](../getting-started/data-model).
+plays a central role within client requests to retrieve data of interest. Secondly, JEXL is utilized within DataWave
+internals to drive query execution. That is, to facilitate query evaluation and object retrieval from DataWave's Accumulo
+[tables](../getting-started/data-model), DataWave Query leverages JEXL libraries to harness a variety of custom and stock
+[Accumulo Iterators][acc_iterators].
 
 ## Query Logics
 
-DataWave Query can be customized through a wide variety of client- and server-side configuration options and also through
+DataWave Query can be customized through a variety of client- and server-side configuration options and also through
 direct extension of software interfaces. Software extension is typically accomplished through the implementation
-of [query logic](development#query-logic-components) components. A DataWave query logic is a loosely-coupled Java class that
-leverages the [JEXL/Iterator framework](#jexl--iterator-framework) to support a specific type of query or use case. A query
-logic instance receives a user's query request as input, and it encapsulates the business logic necessary to service that
-query. Query logics are typically instantiated within the web tier via dependency injection, using IoC frameworks such as
-Spring and CDI.
-
-The DataWave project provides several query logics that support a variety of use cases and configuration options. These
-will be discussed in detail within subsequent [pages](/pages/tags/query) of this user documentation.
+of [query logic](development#query-logic-components) components. A DataWave query logic is essentially a pluggable Java class
+that leverages the [JEXL/Iterator framework](#jexl--iterator-framework) to support a specific type of query. Generally, a query
+logic instance receives a user's query request as input and encapsulates the logic necessary to service that query.
+Query logics are typically instantiated within the web tier via dependency injection, using IoC frameworks such as Spring
+and CDI.
 
 ## REST Services
 

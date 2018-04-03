@@ -14,15 +14,10 @@ DataWave creates and maintains a data dictionary
 and their associated field names. A typical DataWave query expression will leverage one or more of these field names to
 find data of interest.
 
-Here, we'll construct a simple query that uses the *GENRES* field from our *tvmaze* data type to find TV shows in the
+Here, we'll construct a simple query that uses the *GENRES* field from our **tvmaze** data type to find TV shows in the
 action and adventure genres.
 
-<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> 
-The data for this example originated from [tvmaze.com/api](http://tvmaze.com/api), and the file that we ingested automatically
-during the quickstart setup is [here](https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-json/src/test/resources/input/tvmaze-api.json).
-For more information, view the [datawaveIngestJson](../getting-started/quickstart-reference#datawave-ingest-functions)
-function documentation
-</div>
+{% include tvmaze-quickstart-note.html %}
 
 ### The Query Expression
 
@@ -210,7 +205,7 @@ Release any server-side resources (*datawaveQuery* client may have already done 
 </div>
 </div>
 
-## Summary
+## In Review
 
 In **Step 1**, to initialize our query, we invoked *DataWave/Query/{ query-logic }/create* using *EventQuery* for the logic parameter.
 

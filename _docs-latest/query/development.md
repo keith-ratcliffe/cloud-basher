@@ -6,8 +6,8 @@ summary: This page describes the DataWave Query API and its associated web servi
 
 ## Query Logic Components
 
-[ TODO: Query logic write-up and examples here ]
+[ Coming soon, work in progress ]
 
 ## Web Services
 
-[ TODO: Web services write-up and examples here ]
+[ Coming soon, work in progress ]
