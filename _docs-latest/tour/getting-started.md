@@ -17,8 +17,8 @@ Follow the steps below to ensure that your environment is up and functioning as 
 
 ### Check the Status of Your Services
 
-Execute the `allStatus` command to show the PIDs of your running DataWave services. If DataWave Ingest isn't running,
-that's fine. We'll start it up later on in the tour
+Execute the quickstart's `allStatus` function to show the PIDs of your running DataWave services. If DataWave Ingest
+isn't running, that's fine. We'll start it up later on in the tour
 
 ```bash
  $ allStatus

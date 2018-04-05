@@ -4,11 +4,24 @@ tags: [getting_started]
 summary: This page provides reference material for the DataWave Quickstart
 ---
 
+## Global Bootstrap Functions
+
+The functions below are implemented in [bin/common.sh][dw_blob_common_sh]
+
+| Function Name | Description |
+|---------------:|:------------- |
+| `allStart` | Start all services |
+| `allStop` | Stop all services gracefully. Use `--hard` flag to `kill -9` |
+| `allStatus` | Display current status of all services, including PIDs if running |
+| `allInstall` | Install all services |
+| `allUninstall` | Uninstall all services, leaving tarballs in place. Optional `--remove-binaries` flag |
+| `allPrintenv` | Display current state of all service configurations |
+
 ## Service Bootstrap Functions
 
-The functions below are implemented for all services, where {*servicename*} can be one of...
+The functions below are implemented for each service, where {*servicename*} can be one of...
 
-**hadoop** \| **accumulo**, *zookeeper* \| **datawave**, *datawaveWeb*, *datawaveIngest*
+**hadoop** | **accumulo** | **zookeeper** | **datawave** (or *datawaveWeb*, *datawaveIngest* individually)
 
 | Function Name&nbsp;&nbsp;&nbsp; | Description |
 |----------------:|:------------- |
@@ -24,21 +37,26 @@ The functions below are implemented for all services, where {*servicename*} can 
 
 ---
 
-## Global Bootstrap Functions
+## Accumulo Shell Alias
 
-The functions below are implemented in [bin/common.sh][dw_blob_common_sh]
+To quickly launch the Accumulo Shell and authenticate as the *root* user, use the quickstart's `ashell` alias
 
-| Function Name | Description |
-|---------------:|:------------- |
-| `allStart` | Start all services |
-| `allStop` | Stop all services gracefully. Use `--hard` flag to `kill -9` |
-| `allStatus` | Display current status of all services, including PIDs if running |
-| `allInstall` | Install all services |
-| `allUninstall` | Uninstall all services, leaving tarballs in place. Optional `--remove-binaries` flag |
-| `allPrintenv` | Display current state of all service configurations |
+```bash
+  $ ashell
+
+  Shell - Apache Accumulo Interactive Shell
+  -
+  - version: 1.8.1
+  - instance name: my-instance-01
+  - instance id: cc3e8158-a94a-4f2e-af9e-d1014b5d1912 
+  -
+  - type 'help' for a list of available commands
+  -
+  root@my-instance-01>
+
+``` 
 
 ## Nuclear Options
-
 
 ### Quick Uninstall
 

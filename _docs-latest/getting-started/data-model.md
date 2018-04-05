@@ -1,7 +1,7 @@
 ---
 title: "DataWave Data Model"
 tags: [getting_started, data_model, ingest, query]
-summary: DataWave utilizes the Accumulo tables schemas described below to implement its
+summary: DataWave utilizes the Accumulo tables schemas described below as the basis for its ingest and query components
 ---
 
 ## Primary Data Table
@@ -85,10 +85,10 @@ The layouts associated with the four ingest error tables are identical to those 
 *Global Index Tables*, and *Data Dictionary Table*. The only difference is that the respective error tables here are meant
 to capture *Data Objects* that failed to be fully loaded during ingest due to one or more processing errors.
 
-Thus, these tables are intended to capture any successfully-processed NFN:FV pairs, just as they would have appeared in
-the normal schema, along with additional NFN keys related to the errors themselves, so that error discovery and
-troubleshooting can proceed as efficiently as possible. Since schema descriptions for the primary data tables apply here
-as well, we describe below only the specific *Data Object* entries that are used to convey information about the error(s)
+That is, these tables are intended to capture all successfully-processed NFN:FV pairs from their respective *Data Objects*,
+just as they would have appeared in the normal schema, including supplemental key/value pairs related to the errors themselves.
+Since schema descriptions for the four primary data tables apply here as well, we describe below only the specific entries
+used to convey information about the error(s)
 
 {% include table_ingest_errors.html %}
 

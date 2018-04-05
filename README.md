@@ -14,7 +14,7 @@
  $ cd <DW SOURCE DIR>
  $ git checkout gh-pages
  
- # Build an run site using the preview server
+ # Build and run site using the preview server
   
  $ bundle update
  $ bundle exec jekyll serve

@@ -6,7 +6,7 @@ toc: false
 
 ## JEXL / Iterator Framework
 
-The design of DataWave Query is predicated in large part upon [Java Expression Language (JEXL)][jexl]. JEXL serves two
+The design of DataWave Query is predicated in large part on [Java Expression Language (JEXL)][jexl]. JEXL serves two
 key roles within the query framework. First, JEXL is used as the basis for DataWave's [query language](syntax). Thus, it
 plays a central role within client requests to retrieve data of interest. Secondly, JEXL is utilized within DataWave
 internals to drive query execution. That is, to facilitate query evaluation and object retrieval from DataWave's Accumulo

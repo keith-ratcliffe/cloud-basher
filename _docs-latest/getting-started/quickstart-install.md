@@ -97,7 +97,7 @@ as shown below. URIs may be local or remote. Local file URI values must be prefi
 
      source DW_HOME/contrib/datawave-quickstart/bin/env.sh     # Added by Step 1
 
-     # If building the quickstart docker image, you only need the exports...no need to source env.sh
+     # If building the quickstart docker image, you only need the exports, no need to source env.sh
      
 ```
 ---

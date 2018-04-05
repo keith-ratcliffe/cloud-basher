@@ -17,9 +17,9 @@ Common use cases for DataWave include...
 * Construction and analysis of distributed graphs
 * Multi-tenant data architectures, with tenants having distinct security requirements and access patterns
 
-DataWave also provides flexible and extensible data security features, which are built upon Accumulo's
-[security][cell_level_sec] model. As a result, organizations can apply either coarse- or fine-grained access
-controls to their data, and they can easily integrate DataWave query clients into their existing security infrastructure.
+DataWave provides flexible and extensible data security features predicated on Accumulo's [security][cell_level_sec] model.
+As a result, organizations can apply either coarse- or fine-grained access controls to their data, and they can easily
+integrate DataWave query clients into their existing security infrastructure.
 
 ## Software Architecture
 

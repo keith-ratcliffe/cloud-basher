@@ -9,19 +9,16 @@ summary: |
 
 ## A Simple Query Example
 
-DataWave creates and maintains a data dictionary
-([https://localhost:8443/DataWave/DataDictionary](https://localhost:8443/DataWave/DataDictionary)) of known data types
-and their associated field names. A typical DataWave query expression will leverage one or more of these field names to
-find data of interest.
-
 Here, we'll construct a simple query that uses the *GENRES* field from our **tvmaze** data type to find TV shows in the
 action and adventure genres.
 
-{% include tvmaze-quickstart-note.html %}
+{% include data-dictionary-note.html %}
+
+{% include tvmaze-note.html %}
 
 ### The Query Expression
 
-DataWave accepts query expressions in either JEXL or Lucene syntax as shown below.
+DataWave accepts query expressions in either JEXL or Lucene [syntax](../query/syntax) as shown below.
 
 <div class="row">
   <div class="col-md-6">
@@ -34,18 +31,16 @@ DataWave accepts query expressions in either JEXL or Lucene syntax as shown belo
   </div>
 </div>
 
-For help with query syntax, view the [guide](../query/syntax).
-
 ## Using the Query API
 
 <div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Most query
 examples in the guided tour will utilize the quickstart's
-**[datawaveQuery](../getting-started/quickstart-reference#datawave-web-functions)** function. It provides a curl-based
-client that streamlines your interactions with the Query API and sets reasonable defaults for most parameters.
+**[datawaveQuery](../getting-started/quickstart-reference#datawave-web-functions)** bash function. It provides a
+curl-based client that streamlines your interactions with the Query API and sets reasonable defaults for most parameters.
 Query parameters can also be easily added and/or overridden.
 <br/><br/>Use **`datawaveQuery --help`** for assistance<br/><br/>
-More importantly, in order to demonstrate Query API usage, each example below will display the key aspects of 
-the actual curl command used and also display the web service response
+More importantly, each example below will display the key aspects of the actual curl command used and also display
+the web service response in order to demonstrate Query API usage
 </div>
 
 <ul id="profileTabs" class="nav nav-tabs">
@@ -218,7 +213,7 @@ In **Step 1**, to initialize our query, we invoked *DataWave/Query/{ query-logic
   Thus, the *EventQuery* logic is the primary API component that DataWave provides for fetching *events* from this table
 
 * Our required parameters here were typical for most DataWave query types: the *query* expression to be evaluated, the *syntax*
-  associated with that expression, the set of Accumulo *auths* enabled for data access, and others. In practice, required
+  associated with that expression, the set of Accumulo *auths* to enable for data access, date range, etc. In practice, required
   and optional parameters may be specified by a combination of the endpoint being invoked, the query logic being used,
   and the REST service itself
 
