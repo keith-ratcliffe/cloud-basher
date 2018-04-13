@@ -1,20 +1,17 @@
 ---
-title: "DataWave Tour: Query Basics"
+title: "DataWave Tour: Edge Query"
 layout: tour
 tags: [getting_started, query]
 summary: |
-  The examples below will demonstrate usage of DataWave's Query API. In order to follow along in your own DataWave
+  The examples below will demonstrate usage of DataWave's Edge Query API. In order to follow along in your own DataWave
   environment, you should first complete the <a href="../getting-started/quickstart-install">Quickstart Installation</a>
 ---
 
-## A Simple Query Example
+## Edge Query Model
 
-Here, we'll construct a simple query that uses the *GENRES* field from our **tvmaze** data type to find TV shows in the
-action and adventure genres.
-
-{% include data-dictionary-note.html %}
-
-{% include tvmaze-note.html %}
+As discussed [earlier](ingest-basics) in the tour of ingest, graph [edges](../getting-started/data-model#edge-table) may be created
+from 
+ 
 
 ### The Query Expression
 
@@ -39,8 +36,8 @@ defaults for most parameters. Query parameters can also be easily added and/or o
 
 {% include tip.html content="Use **datawaveQuery --help** for assistance" %}
 
-To demonstrate Query API usage, each example will show key aspects of the required curl command and the associated web
-service response 
+More importantly, each example below will display the key aspects of the actual curl command used and also display
+the web service response in order to demonstrate Query API usage
 
 <ul id="profileTabs" class="nav nav-tabs">
     <li class="active"><a class="noCrossRef" href="#create-query" data-toggle="tab"><b>1: Create the Query</b></a></li>

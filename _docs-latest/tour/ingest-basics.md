@@ -9,7 +9,7 @@ summary: |
 
 ## Configuration Basics
 
-DataWave Ingest is largely driven by configuration. Below we'll use DataWave's example **tvmaze** data type ('myjson' config)
+DataWave Ingest is largely driven by configuration. Below we'll use DataWave's example *tvmaze* data type (*myjson* config)
 to examine the basic settings used to establish a data type within the ingest framework.
 
 {% include data-dictionary-note.html %}
@@ -256,6 +256,21 @@ Thus, it leverages this config file to determine how and when to create edge key
 </div>
 </div>
 
+<button type="button" class="btn" data-toggle="collapse" data-target="#details123">Steps 1, 2, &amp; 3 - More Info</button>
+<div id="details123" class="collapse" markdown="1">
+In **Steps 1**, **2** and **3**, we looked at a few of the most important configuration properties for establishing a
+data type within the DataWave Ingest framework
+
+* **data.name**, and optionally **{data.name}.output.name**, will uniquely identify a data type and its associated raw
+  data feed. These two properties can be leveraged to split up a single data type over multiple data feeds, if needed
+  
+* **{data.name}.reader.class**, **{data.name}.ingest.helper.class**, **{data.name}.handler.classes**, and
+  **all.handler.classes** together define processing pipeline for a given data type, in order to transform raw input
+  into [data objects](../getting-started/data-model#primary-data-table) comprised of Accumulo key/value pairs
+</div>
+
+---
+
 ## Load Some New Data
 
 Lastly, we'll fetch some new data via the TVMAZE-API service and we'll load it into DataWave.
@@ -279,6 +294,7 @@ The script simply iterates over the specified list of TV show names, invokes
 output file specified by `--outfile`
 
 ```bash
+
  $ cd DW_SOURCE/contrib/datawave-quickstart/bin/services/datawave/ingest-examples
  
  # We'll use the --download-only flag to write the data to a local file only,
@@ -301,6 +317,8 @@ output file specified by `--outfile`
  [DW-INFO] - Downloading show data: 'North and South'
  [DW-INFO] - Downloading show data: 'MASH'
  [DW-INFO] - Data download is complete
+ ...
+ 
 
 ```
 </div>
@@ -311,12 +329,10 @@ All that's left now is to write the raw data to HDFS and then invoke DataWave's 
 with the appropriate parameters. To accomplish both, we'll simply invoke a quickstart utility function,
 [datawaveIngestJson](../getting-started/quickstart-reference#datawave-ingest-functions)
 
-This function has only one required parameter, the path of our raw data file, but the function will display the
-actual bash commands that are used to ingest the file, as shown below.
+This quickstart function also displays the actual bash commands required to ingest the file, as shown below.
 
-They key thing to note here is that DataWave's [live-ingest.sh][dw_blob_live_ingest_sh] script is used, which passes the
-`-outputMutations` and `-mapOnly` flags to the IngestJob class to enable "live" mode. Live mode results in a MapReduce
-job in which the map tasks write DataWave key/value pairs directly into Tablet Server memory via Accumulo *BatchWriter*
+They key thing to note here is that DataWave's [live-ingest.sh][dw_blob_live_ingest_sh] script is used, which passes
+flags to the IngestJob class to enable [Live Ingest](../ingest/overview#live-ingest) mode.
 
 ```bash
  # Quickstart utility function...
@@ -336,6 +352,9 @@ job in which the map tasks write DataWave key/value pairs directly into Tablet S
    $DATAWAVE_INGEST_HOME/bin/ingest/live-ingest.sh /Ingest/myjson/more-tv-shows.json 1 \
       -inputFormat datawave.ingest.json.mr.input.JsonInputFormat \
       -data.name.override=myjson
+ ...
+ ...
+ # Job log is written to the console and also to QUICKSTART_DIR/data/hadoop/yarn/log/
  ...
  ...
  18/04/01 19:45:43 INFO mapreduce.Job: Running job: job_1523209920746_0004
@@ -475,18 +494,8 @@ job in which the map tasks write DataWave key/value pairs directly into Tablet S
 </div>
 </div>
 
-## In Review
-
-In **Steps 1**, **2** and **3**, we looked at a few of the most important configuration properties for establishing a
-data type within the DataWave Ingest framework
-
-* *data.name*, and optionally *{data.name}.output.name*, uniquely identify a data type and its associated raw data feed.
-  These properties can be leveraged to split up a single data type over multiple data feeds, if needed
-  
-* *file.input.format*, *{data.name}.reader.class*, *{data.name}.ingest.helper.class*, *{data.name}.handler.classes*, and
-  *all.handler.classes* together define the DataWave Ingest API processing pipeline, for transforming raw data into
-   Accumulo key/value pairs
-
+<button type="button" class="btn" data-toggle="collapse" data-target="#details45">Steps 4 &amp; 5 - More Info</button>
+<div id="details45" class="collapse" markdown="1">
 In **Steps 4** and **5**, we acquired some new raw data via the TVMAZE-API service and we ingested it via MapReduce
 
 * We loaded the raw data into HDFS with a simple copy command...
@@ -497,11 +506,13 @@ In **Steps 4** and **5**, we acquired some new raw data via the TVMAZE-API servi
 * Finally, we used DataWave's [live-ingest.sh][dw_blob_live_ingest_sh] script to kick off the MapReduce job. This script passes
   the`-outputMutations` and `-mapOnly` flags to the [IngestJob][dw_blob_ingest_job] class to enable "live" mode...
   ```bash
-    $DATAWAVE_INGEST_HOME/bin/ingest/live-ingest.sh \
-      /Ingest/myjson/more-tv-shows.json 1 \
-      -inputFormat datawave.ingest.json.mr.input.JsonInputFormat \
-      -data.name.override=myjson
+   $DATAWAVE_INGEST_HOME/bin/ingest/live-ingest.sh \
+     /Ingest/myjson/more-tv-shows.json \                           # Raw file in HDFS
+     1 \                                                           # $NUM_SHARDS (i.e., number of reducers)
+     -inputFormat datawave.ingest.json.mr.input.JsonInputFormat \  # Overrides IngestJob's default input format
+     -data.name.override=myjson                                    # Forces the job to use our 'myjson' config
   ```
+</div>
   
 [dw_blob_myjson_config]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/myjson-ingest-config.xml
 [dw_blob_ingest_config]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/ingest-config.xml

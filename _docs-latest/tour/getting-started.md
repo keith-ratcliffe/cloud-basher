@@ -2,7 +2,6 @@
 title: "DataWave Tour: Getting Started"
 layout: tour
 tags: [getting_started]
-toc: false
 summary: |
   The guided tour will introduce you to DataWave's ingest and query components and provide several examples of how to use
   and configure them. In order to follow along with the examples, you should first complete the
@@ -20,7 +19,7 @@ using its example datasets, its pre-built configs, and many of its [utility func
 </ul>
 <div class="tab-content">
 <div role="tabpanel" class="tab-pane active" id="check-services" markdown="1">
-### Step 1: Check the Status of Your Services
+### Step 1: Check the Status of Services
 
 ```bash
  $ allStatus
@@ -36,7 +35,7 @@ using its example datasets, its pre-built configs, and many of its [utility func
 If no services are currently running, go to **Step 2**
 </div>
 <div role="tabpanel" class="tab-pane" id="verify-web" markdown="1">
-### Step 2: Verify Your DataWave Web Deployment
+### Step 2: Verify DataWave Web Deployment
 
 ```bash
  # If DataWave Web is not currently running, start it up with this function...
@@ -65,6 +64,8 @@ If no services are currently running, go to **Step 2**
 ```
 </div>
 </div>
+
+---
 
 ## Troubleshooting
 

@@ -37,7 +37,7 @@ The functions below are implemented for each service, where {*servicename*} can 
 
 ---
 
-## Accumulo Shell Alias
+## Accumulo Shell Alias (ashell)
 
 To quickly launch the Accumulo Shell and authenticate as the *root* user, use the quickstart's `ashell` alias
 

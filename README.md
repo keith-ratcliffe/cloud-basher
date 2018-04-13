@@ -14,10 +14,10 @@
  $ cd <DW SOURCE DIR>
  $ git checkout gh-pages (or gh-pages-dev)
  
- # Build and run site using the preview server
+ # Build and run site using the preview server, and auto-sync changes via --watch
   
  $ bundle update
- $ bundle exec jekyll serve
+ $ bundle exec jekyll serve --watch
  
  # Now browse to http://localhost:4000
  

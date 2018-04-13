@@ -41,6 +41,8 @@ If you would prefer to run the DataWave Quickstart environment as a Docker conta
 Go [here][dw_docker_alternative] instead and view the *README* file. Note that the *[Override Default Binaries](#override-default-binaries)*
 section below is also relevant to the Docker image build.
 
+---
+
 ## Quickstart Setup
 
 ```bash
@@ -65,14 +67,14 @@ you should ensure that all are stopped/disabled before proceeding" %}
     <li class="active"><a class="noCrossRef" href="#update-bashrc" data-toggle="tab"><b>1: Update ~/.bashrc</b></a></li>
     <li><a class="noCrossRef" href="#bootstrap-env" data-toggle="tab"><b>2: Bootstrap the Environment</b></a></li>
     <li><a class="noCrossRef" href="#install-services" data-toggle="tab"><b>3: Install Services</b></a></li>
-    <li><a class="noCrossRef" href="#wildfly-test" data-toggle="tab"><b>4: Start Wildfly &amp; Test Web Services</b></a></li>
+    <li><a class="noCrossRef" href="#wildfly-test" data-toggle="tab"><b>4: Start Wildfly &amp; Run Tests</b></a></li>
 </ul>
 <div class="tab-content">
 
 <div role="tabpanel" class="tab-pane active" id="update-bashrc" markdown="1">
 ### Step 1: Update ~/.bashrc
 
-#### 1.1 - Source env.sh
+#### 1.1 Add the Quickstart Environment
 
 This step ensures that your DataWave environment and all its services will remain configured correctly across
 bash sessions.
@@ -85,7 +87,7 @@ The *[env.sh][dw_blob_env_sh]* script is a wrapper that bootstraps each service 
 respective *{servicename}/boostrap.sh* script. These scripts define supporting bash variables and functions,
 encapsulating configuration and functionality consistently for all services.
 
-#### 1.2 - Override Default Binaries
+#### 1.2 Override Default Binaries
 
 To override the quickstart's default version of a particular binary, simply override the desired *DW_\*_DIST_URI* value
 as shown below. URIs may be local or remote. Local file URI values must be prefixed with *file://*
@@ -146,6 +148,8 @@ DataWave's REST API. Note any test failures, if present, and check logs for erro
 </div>
 
 </div>
+
+---
 
 ## What's Next?
 
