@@ -12,7 +12,7 @@
  # Checkout the gh-pages branch
  
  $ cd <DW SOURCE DIR>
- $ git checkout gh-pages
+ $ git checkout gh-pages (or gh-pages-dev)
  
  # Build and run site using the preview server
   

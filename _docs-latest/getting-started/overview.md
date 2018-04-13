@@ -6,7 +6,7 @@ toc: false
 
 ## Introduction
 
-The DataWave project provides a general purpose framework that facilitates persistence, indexing
+The DataWave project provides a general purpose framework to facilitate persistence, indexing
 and retrieval of both structured and unstructured textual objects. Central to DataWave's design is that it leverages
 [Apache Accumulo][apache_accumulo] to implement a flexible [data model](data-model) and to implement [ingest](../ingest/overview)
 and [query](../query/overview) components that are robust and scalable.

@@ -17,7 +17,7 @@ internals to drive query execution. That is, to facilitate query evaluation and 
 
 DataWave Query can be customized through a variety of client- and server-side configuration options and also through
 direct extension of software interfaces. Software extension is typically accomplished through the implementation
-of [query logic](development#query-logic-components) components. A DataWave query logic is essentially a pluggable Java class
+of [query logic](development#query-logic-components) components. A DataWave query logic is a loosely-coupled Java class
 that leverages the [JEXL/Iterator framework](#jexl--iterator-framework) to support a specific type of query. Generally, a query
 logic instance receives a user's query request as input and encapsulates the logic necessary to service that query.
 Query logics are typically instantiated within the web tier via dependency injection, using IoC frameworks such as Spring

@@ -7,7 +7,7 @@ summary: |
   <a href="../tour/getting-started">guided tour</a>. It is also generally useful as a development tool, as it provides a
   consistent, repeatable process for deploying and testing DataWave locally.</p>
   <p>The quickstart provides setup and tear-down automation for DataWave, Hadoop, Accumulo, ZooKeeper, and Wildfly,
-  and it includes many <a href="quickstart-reference">utility functions</a>, which will streamline most of your interactions
+  and it includes many <a href="quickstart-reference">utility functions</a>, which will streamline most interactions
   with these services.</p>
 ---
 
@@ -28,12 +28,12 @@ summary: |
 
 ### Get the Source Code
 
-<a class="btn btn-success" style="width: 220px;" href="https://github.com/{{ site.repository }}/archive/{{ site.default_branch }}.zip" role="button"><i class="fa fa-download fa-lg"></i> Download Archive</a>
-or <a class="btn btn-success" style="width: 220px;" href="https://github.com/{{ site.repository }}/" role="button" target="_blank"><i class="fa fa-github fa-lg"></i> Clone the Repo</a>
+<a class="btn btn-success" style="width: 220px;" href="{{ site.repository_url }}/archive/{{ site.default_branch }}.zip" role="button"><i class="fa fa-download fa-lg"></i> Download Archive</a>
+or <a class="btn btn-success" style="width: 220px;" href="{{ site.repository_url }}/" role="button" target="_blank"><i class="fa fa-github fa-lg"></i> Clone the Repo</a>
 
-<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The local path that
-you select for DataWave's source code will be refererred to as **DW_HOME** from this point forward. Wherever it appears in a bash
-command below, be sure to substitute it with the actual path</div>
+{% include note.html content="The local path that you select for DataWave's source code will be refererred to as
+**DW_SOURCE** from this point forward. Wherever it appears in a bash command below, be sure to substitute it with the
+actual path" %}
 
 ### Docker Alternative
 
@@ -44,10 +44,10 @@ section below is also relevant to the Docker image build.
 ## Quickstart Setup
 
 ```bash
-  $ echo "source DW_HOME/contrib/datawave-quickstart/bin/env.sh" >> ~/.bashrc  # Step 1
-  $ source ~/.bashrc                                                           # Step 2
-  $ allInstall                                                                 # Step 3
-  $ datawaveWebStart && datawaveWebTest                                        # Step 4
+  $ echo "source DW_SOURCE/contrib/datawave-quickstart/bin/env.sh" >> ~/.bashrc   # Step 1
+  $ source ~/.bashrc                                                              # Step 2
+  $ allInstall                                                                    # Step 3
+  $ datawaveWebStart && datawaveWebTest                                           # Step 4
   # Setup is now complete
 ```
 
@@ -56,30 +56,36 @@ to at least skim over the sections below to get an idea of how the setup works a
 for your own preferences.
 
 To keep things simple, **DataWave**, **Hadoop**, **Accumulo**, **ZooKeeper**, and **Wildfly** will be installed under your
-*DW_HOME/contrib/datawave-quickstart* directory, and all will be owned by / executed as the current user.
+*DW_SOURCE/contrib/datawave-quickstart* directory, and all will be owned by / executed as the current user.
 
-<div markdown="span" class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> <b>Caution</b> If
-you currently have any of the above installed locally under *any* user account,
-you should ensure that all are stopped/disabled before proceeding
-</div>
+{% include important.html content="If you currently have any of the above installed locally under *any* user account,
+you should ensure that all are stopped/disabled before proceeding" %}
 
-### STEP 1
+<ul id="profileTabs" class="nav nav-tabs">
+    <li class="active"><a class="noCrossRef" href="#update-bashrc" data-toggle="tab"><b>1: Update ~/.bashrc</b></a></li>
+    <li><a class="noCrossRef" href="#bootstrap-env" data-toggle="tab"><b>2: Bootstrap the Environment</b></a></li>
+    <li><a class="noCrossRef" href="#install-services" data-toggle="tab"><b>3: Install Services</b></a></li>
+    <li><a class="noCrossRef" href="#wildfly-test" data-toggle="tab"><b>4: Start Wildfly &amp; Test Web Services</b></a></li>
+</ul>
+<div class="tab-content">
 
-#### Update .bashrc
+<div role="tabpanel" class="tab-pane active" id="update-bashrc" markdown="1">
+### Step 1: Update ~/.bashrc
+
+#### 1.1 - Source env.sh
 
 This step ensures that your DataWave environment and all its services will remain configured correctly across
 bash sessions.
 
 ```bash
-  $ echo "source DW_HOME/contrib/datawave-quickstart/bin/env.sh" >> ~/.bashrc  # Step 1
+  $ echo "source DW_SOURCE/contrib/datawave-quickstart/bin/env.sh" >> ~/.bashrc  # Step 1
 ```
 
 The *[env.sh][dw_blob_env_sh]* script is a wrapper that bootstraps each service in turn by sourcing its
 respective *{servicename}/boostrap.sh* script. These scripts define supporting bash variables and functions,
 encapsulating configuration and functionality consistently for all services.
 
-
-#### Override Default Binaries
+#### 1.2 - Override Default Binaries
 
 To override the quickstart's default version of a particular binary, simply override the desired *DW_\*_DIST_URI* value
 as shown below. URIs may be local or remote. Local file URI values must be prefixed with *file://*
@@ -95,16 +101,16 @@ as shown below. URIs may be local or remote. Local file URI values must be prefi
      export DW_JAVA_DIST_URI=file:///my/local/binaries/jdk-8-update-x.tar.gz
      export DW_MAVEN_DIST_URI=file:///my/local/binaries/apache-maven-x.y.z.tar.gz
 
-     source DW_HOME/contrib/datawave-quickstart/bin/env.sh     # Added by Step 1
+     source DW_SOURCE/contrib/datawave-quickstart/bin/env.sh     # Added by Step 1
 
      # If building the quickstart docker image, you only need the exports, no need to source env.sh
      
 ```
----
 
-### STEP 2
+</div>
 
-#### Bootstrap the Environment
+<div role="tabpanel" class="tab-pane" id="bootstrap-env" markdown="1">
+### Step 2: Bootstrap the Environment
 ```bash
   $ source ~/.bashrc                                                           # Step 2
 ```
@@ -115,32 +121,31 @@ A DataWave build will also be kicked off automatically.
 DataWave's ingest and web service binaries will be copied into place upon conclusion of the build. This step can take
 several minutes to complete, so now is a good time step away for a break.
 
-<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> The **DW_DATAWAVE_BUILD_COMMAND**
-variable in [datawave/bootstrap.sh][dw_blob_datawave_bootstrap_mvn_cmd] defines the Maven command used for the build. It may be overridden
-in *~/.bashrc* or from the command line as needed</div>
+{% include note.html content="The **DW_DATAWAVE_BUILD_COMMAND** variable in [datawave/bootstrap.sh][dw_blob_datawave_bootstrap_mvn_cmd]
+defines the Maven command used for the build. It may be overridden in *~/.bashrc* or from the command line as needed" %}
+</div>
 
----
-
-### STEP 3
-
-#### Install Services
+<div role="tabpanel" class="tab-pane" id="install-services" markdown="1">
+### Step 3: Install Services
 ```bash
   $ allInstall                                                                 # Step 3
 ```
 The `allInstall` bash function will initialize and configure all services in the correct sequence. Alternatively,
 individual services may be installed one at a time, if desired, using their respective `{servicename}Install` bash functions.
 
----
+</div>
 
-### STEP 4
-
-#### Start Wildfly and Test Web Services
+<div role="tabpanel" class="tab-pane" id="wildfly-test" markdown="1">
+### Step 4: Start Wildfly and Test Web Services
 ```bash
   $ datawaveWebStart && datawaveWebTest                                        # Step 4
 ```
 
 This will start up DataWave Web and run [preconfigured tests][dw_web_tests] against
-DataWave's REST API. Note any test failures, if present, and check logs for error messages.
+DataWave's REST API. Note any test failures, if present, and check logs for error messages
+</div>
+
+</div>
 
 ## What's Next?
 

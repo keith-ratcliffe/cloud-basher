@@ -1,5 +1,5 @@
 # project repo
-repository: NationalSecurityAgency/datawave
+repository_url: https://github.com/NationalSecurityAgency/datawave
 
 # project default branch
 default_branch: master

@@ -10,7 +10,7 @@ The functions below are implemented in [bin/common.sh][dw_blob_common_sh]
 
 | Function Name | Description |
 |---------------:|:------------- |
-| `allStart` | Start all services |
+| `allStart` | Start up all services in the appropriate sequence |
 | `allStop` | Stop all services gracefully. Use `--hard` flag to `kill -9` |
 | `allStatus` | Display current status of all services, including PIDs if running |
 | `allInstall` | Install all services |
@@ -21,7 +21,7 @@ The functions below are implemented in [bin/common.sh][dw_blob_common_sh]
 
 The functions below are implemented for each service, where {*servicename*} can be one of...
 
-**hadoop** | **accumulo** | **zookeeper** | **datawave** (or *datawaveWeb*, *datawaveIngest* individually)
+**hadoop** | **accumulo** | **zookeeper** | **datawaveWeb**, **datawaveIngest**, or simply **datawave** for both
 
 | Function Name&nbsp;&nbsp;&nbsp; | Description |
 |----------------:|:------------- |
@@ -68,10 +68,10 @@ Same as above, but also remove any downloaded *.tar.gz files:
 ```bash
   $ allStop --hard ; allUninstall --remove-binaries
 ```
-<div markdown="span" class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> <b>Warning:</b> If you intend
-to uninstall the quickstart *completely*, don't forget to remove the *env.sh* line from your *~/.bashrc* as the
-very last step in the process. Otherwise, you'll bootstrap everything again the next time you start a new
-bash session</div>
+{% include important.html content="If you uninstalled the quickstart with the **--remove-binaries** flag and you do not
+   intend to perform a reinstall, you should also remove the *env.sh* line from your *~/.bashrc* as the very last step in
+   the process. Otherwise, tarballs will be fetched again automatically the next time you start a new bash session or
+   manually source *~/.bashrc*" %}
 
 ### Quick Reinstall
 
@@ -79,10 +79,6 @@ Same as above, but re-download and reinstall everything:
 ```bash
   $ allStop --hard ; allUninstall --remove-binaries && allInstall
 ```
-<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> If you're reinstalling
-the quickstart and you've updated or overridden any of the quickstart's environment variables since the previous install, you should
-start a new bash session prior to executing the commands above, to ensure that your new settings take effect</div>
-
 ---
 
 ## DataWave Functions

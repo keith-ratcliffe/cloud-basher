@@ -33,20 +33,19 @@ DataWave accepts query expressions in either JEXL or Lucene [syntax](../query/sy
 
 ## Using the Query API
 
-<div markdown="span" class="alert alert-info" role="alert"><i class="fa fa-info-circle"></i> <b>Note:</b> Most query
-examples in the guided tour will utilize the quickstart's
-**[datawaveQuery](../getting-started/quickstart-reference#datawave-web-functions)** bash function. It provides a
-curl-based client that streamlines your interactions with the Query API and sets reasonable defaults for most parameters.
-Query parameters can also be easily added and/or overridden.
-<br/><br/>Use **`datawaveQuery --help`** for assistance<br/><br/>
+Most query examples in the guided tour will utilize the quickstart's **[datawaveQuery](../getting-started/quickstart-reference#datawave-web-functions)**
+bash function. It provides a curl-based client that streamlines your interactions with the Query API and sets reasonable
+defaults for most parameters. Query parameters can also be easily added and/or overridden.
+
+{% include tip.html content="Use **datawaveQuery --help** for assistance" %}
+
 More importantly, each example below will display the key aspects of the actual curl command used and also display
 the web service response in order to demonstrate Query API usage
-</div>
 
 <ul id="profileTabs" class="nav nav-tabs">
-    <li class="active"><a class="noCrossRef" href="#create-query" data-toggle="tab">1: Create the Query</a></li>
-    <li><a class="noCrossRef" href="#get-results" data-toggle="tab">2: Fetch Paged Results</a></li>
-    <li><a class="noCrossRef" href="#close-query" data-toggle="tab">3: Close the Query</a></li>
+    <li class="active"><a class="noCrossRef" href="#create-query" data-toggle="tab"><b>1: Create the Query</b></a></li>
+    <li><a class="noCrossRef" href="#get-results" data-toggle="tab"><b>2: Fetch Paged Results</b></a></li>
+    <li><a class="noCrossRef" href="#close-query" data-toggle="tab"><b>3: Close the Query</b></a></li>
 </ul>
 <div class="tab-content">
 <div role="tabpanel" class="tab-pane active" id="create-query" markdown="1">
@@ -85,6 +84,27 @@ Initializes server-side resources and responds with a unique ID for the query
  }
  
 ```
+<button type="button" class="btn" data-toggle="collapse" data-target="#details1">Step 1 - More Details</button>
+<div id="details1" class="collapse" markdown="1">
+To initialize our query, we invoked **DataWave/Query/{ query-logic }/create** using *EventQuery* for the
+*query-logic* parameter...
+
+* *EventQuery* is the main [query logic](../query/development#query-logic-components) for retrieving data objects
+  from DataWave's [primary data table](../getting-started/data-model#primary-data-table). Semantically, the term *event*
+  simply reflects the fact that these data objects are sorted and partitioned primarily by date. The date value assigned
+  to a given object for this purpose is typically user-specified, per-data type via ingest configuration
+  
+* Query logics are typically configured in the web service via Spring XML files such as [this one][dw_blob_qlf_xml]
+  
+* Alternatively, we could have used the **createAndNext** endpoint, which combines *Step 1* and *Step 2* into
+  a single client request for convenience, automatically retrieving the first page of results, if any
+
+* Our required parameters here were typical for most DataWave query types: the *query* expression to be evaluated, the *syntax*
+  associated with that expression, the set of Accumulo *auths* to enable for data access, date range, etc. In practice, required
+  and optional parameters for any given query may be specified by a combination of the endpoint being invoked, the query
+  logic being used, and the REST service itself
+</div>
+
 </div>
 <div role="tabpanel" class="tab-pane" id="get-results" markdown="1">
 ### Step 2: Fetch Paged Results
@@ -159,6 +179,18 @@ Repeat this step until all pages have been returned, indicated by HTTP status co
  }
 
 ```
+<button type="button" class="btn" data-toggle="collapse" data-target="#details2">Step 2 - More Details</button>
+<div id="details2" class="collapse" markdown="1">
+To retrieve results, we invoked **DataWave/Query/{ query-id }/next** with our query ID from *Step 1*...
+
+* The **next** endpoint should have returned at least one page of results containing multiple TV shows, the size of which was bounded
+by the **pagesize** parameter that we specified in *Step 1* (defaulted to 10 by the *datawaveQuery* client)
+
+* Clients continue to invoke **next** with the given query ID until all results have been returned.
+
+* If there are no more results to fetch, the **next** endpoint responds with HTTP status code **204**
+</div>
+  
 </div>
 <div role="tabpanel" class="tab-pane" id="close-query" markdown="1">
 ### Step 3: Close the Query
@@ -197,39 +229,21 @@ Release any server-side resources (*datawaveQuery* client may have already done 
  </html>
  
 ```
-</div>
-</div>
-
-## In Review
-
-In **Step 1**, to initialize our query, we invoked *DataWave/Query/{ query-logic }/create* using *EventQuery* for the logic parameter.
-
-* Alternatively, we could have used the *createAndNext* endpoint, which combines *Step 1* and *Step 2* into
-  a single client request for convenience, automatically retrieving the first page of results, if any
-
-* *EventQuery* here denotes the [query logic component](../query/development#query-logic-components) that we
-  used for query execution. Semantically, an *event* in this context is a simple abstraction that DataWave uses to denote a
-  single date-sorted record stored within DataWave's [primary data table](../getting-started/data-model#primary-data-table).
-  Thus, the *EventQuery* logic is the primary API component that DataWave provides for fetching *events* from this table
-
-* Our required parameters here were typical for most DataWave query types: the *query* expression to be evaluated, the *syntax*
-  associated with that expression, the set of Accumulo *auths* to enable for data access, date range, etc. In practice, required
-  and optional parameters may be specified by a combination of the endpoint being invoked, the query logic being used,
-  and the REST service itself
-
-In **Step 2**, to retrieve results, we invoked *DataWave/Query/{ query-id }/next* with our query ID from *Step 1*.
-
-* The *next* endpoint should have returned a page of results containing multiple TV shows, the size of which was bounded
-  by the *pagesize* parameter that we specified in *Step 1* (defaulted to 10 by the *datawaveQuery* client)
-
-* If there are no more results to fetch, the *next* endpoint responds with HTTP status code *204*
-
-In **Step 3**, to release server-side resources, we invoked *DataWave/Query/{ query-id }/close* with our query ID from *Step 1*.
+<button type="button" class="btn" data-toggle="collapse" data-target="#details3">Step 3 - More Details</button>
+<div id="details3" class="collapse" markdown="1">
+To release server-side resources, we invoked **DataWave/Query/{ query-id }/close** with our query ID from *Step 1*...
 
 * Query clients should always invoke the *close* endpoint to release server-side resources when no further interaction
   with the query is needed
-  
+
 * Production query clients should be designed to automatically invoke *close* when *next* has no more results (as
   indicated by HTTP status code *204*), and also when the client encounters an unrecoverable error anytime after
   query creation
-  
+
+* Queries will also be closed automatically at the server after a configured period of idle time
+</div>
+
+</div>
+</div>
+
+[dw_blob_qlf_xml]: https://github.com/NationalSecurityAgency/datawave/blob/master/web-services/deploy/configuration/src/main/resources/datawave/query/QueryLogicFactory.xml#L420

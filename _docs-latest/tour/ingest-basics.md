@@ -7,18 +7,19 @@ summary: |
   environment, you should first complete the <a href="../getting-started/quickstart-install">Quickstart Installation</a>
 ---
 
-## Ingest Configuration Basics
+## Configuration Basics
 
 DataWave Ingest is largely driven by configuration. Below we'll use DataWave's example **tvmaze** data type ('myjson' config)
-to examine the basic configuration settings that are used to establish a data type within the ingest framework.
+to examine the basic settings used to establish a data type within the ingest framework.
 
 {% include data-dictionary-note.html %}
 
 {% include tvmaze-note.html %}
 
 <ul id="profileTabs" class="nav nav-tabs">
-    <li class="active"><a class="noCrossRef" href="#define-type" data-toggle="tab">1: Define the Data Type</a></li>
-    <li><a class="noCrossRef" href="#register-type" data-toggle="tab">2: Register the Data Type</a></li>
+    <li class="active"><a class="noCrossRef" href="#define-type" data-toggle="tab"><b>1: Define the Data Type</b></a></li>
+    <li><a class="noCrossRef" href="#register-type" data-toggle="tab"><b>2: Register the Data Type</b></a></li>
+    <li><a class="noCrossRef" href="#other-configs" data-toggle="tab"><b>3: Additional Considerations</b></a></li>
 </ul>
 <div class="tab-content">
 <div role="tabpanel" class="tab-pane active" id="define-type" markdown="1">
@@ -35,20 +36,15 @@ The example config, [myjson-ingest-config.xml][dw_blob_myjson_config], defines o
      <name>data.name</name>
      <value>myjson</value>
      <description>
-       This value is effectively an identifier for both the data type and its associated data
-       feed, in order to distinguish it from other data types/feeds registered within DataWave.
-       Therefore, it must be unique.
-            
-       That is, when we kick off an ingest job for a set of related input files, we pass
-       this identifier along to the job runner, which instructs DataWave to use the settings
-       defined here to control the processing of those files.
+       This value is effectively an identifier for both the data type and its
+       associated data feed. Thus, it must be unique across all data types.
                                     
-       Additionally, if a "{data.name}.output.name" value is NOT specified below, then, by
-       default, this value will also be used as the data type identifier in Accumulo, and
-       will therefore be known to DataWave Query clients via the data dictionary.
+       Unless a '{data.name}.output.name' value is specified, this value will
+       also be used as the data type identifier in Accumulo and can therefore
+       be leveraged by query clients for data filtering purposes.
        
-       Also note that {data.name} is used as a prefix for most of the remaining property
-       names in this file
+       Note that '{data.name}.' is used as a prefix for most of the remaining
+       property names in this file
      </description>
  </property>
 
@@ -56,18 +52,31 @@ The example config, [myjson-ingest-config.xml][dw_blob_myjson_config], defines o
      <name>myjson.output.name</name>
      <value>tvmaze</value>
      <description>
-       This will be the name used to identify the data type in Accumulo and will be known to
-       DataWave Query clients via the data dictionary. It does not have to be unique.
+       This value will be used to identify the data type in Accumulo and thus
+       may be used by query clients for filtering. Doesn't have to be unique.
        
-       For example, we might find later on that http://api.tvmaze.com has additional data that
-       we're interested in, perhaps info about all past episodes of the TV shows we've ingested.
+       For example, we might find later on that http://api.tvmaze.com has
+       additional data that we're interested in, perhaps info about all past
+       episodes of the TV shows we've ingested.
        
-       Rather than modify the 'myjson' data feed, we may opt to establish a brand new feed with
-       its own distinct config. If so, we can still utilize 'tvmaze' as our *.output.name value.
+       Rather than modify the 'myjson' data feed, we may opt to establish a
+       brand new feed with its own distinct config. If so, we can still utilize
+       'tvmaze' as our *.output.name value for the new feed.
        
-       Using the same output name allows for the Accumulo data objects from the new feed to be
-       merged into, and collocated with, the corresponding data objects from the 'myjson' feed,
-       provided both feeds are utilizing the same sharding and UID creation strategies
+       Using the same output name for the new feed allows its data objects to
+       be merged into and collocated with the corresponding data objects from
+       the 'myjson' feed, provided that both feeds are utilizing compatible
+       sharding and UID creation strategies
+     </description>
+ </property>
+ 
+ <property>
+     <name>myjson.data.category.date</name>
+     <value>PREMIERED</value>
+     <description>
+       Known field within the data to be used, if present, for the shard row id
+       in 'YYYYMMDD' format (a.k.a. "event date"). Otherwise, current date will
+       be used
      </description>
  </property>
 
@@ -84,8 +93,8 @@ The example config, [myjson-ingest-config.xml][dw_blob_myjson_config], defines o
      <value>datawave.ingest.json.mr.input.JsonRecordReader</value>
      <description>
        Implements Hadoop MapReduce RecordReader and other DataWave-specific
-       interfaces in order to present raw data objects (e.g., TV shows) to
-       our mappers, i.e., datawave.ingest.mapreduce.EventMapper, as input
+       interfaces in order to present raw data objects (e.g., TV shows) to our
+       mappers, i.e., datawave.ingest.mapreduce.EventMapper, as input
      </description>
  </property>
 
@@ -102,8 +111,9 @@ The example config, [myjson-ingest-config.xml][dw_blob_myjson_config], defines o
      <name>myjson.handler.classes</name>
      <value>datawave.ingest.json.mr.handler.ContentJsonColumnBasedHandler</value>
      <description>
-       Comma-delimited list of classes that will process each data object in order
-       to produce Accumulo key/value pairs in accordance with DataWave's data model
+       Comma-delimited list of classes that will process each data object in
+       order to produce Accumulo key/value pairs in accordance with DataWave's
+       data model
      </description>
  </property>
  
@@ -111,20 +121,22 @@ The example config, [myjson-ingest-config.xml][dw_blob_myjson_config], defines o
      <name>myjson.data.category.marking.default</name>
      <value>PRIVATE|(BAR&amp;FOO)</value>
      <description>
-       ColumnVisibility expression to be applied to each field, when 
-       the raw data is known to provide none
+       ColumnVisibility expression to be applied to each field, when the raw
+       data is known to provide none
      </description>
  </property>
  
  <property>
      <name>myjson.data.category.index</name>
      <value>NAME,ID,EMBEDDED_CAST_CHARACTER_NAME,...</value>
-     <description>List fields names that we want to have indexed</description>
+     <description>
+       List fields names that we want to have indexed in order to make them
+       searchable via the query api.
+     </description>
  </property>
 
  <!-- 
-    The remaining settings in this file are beyond the scope of
-    this example, and will be covered later 
+   The remaining settings in this file are beyond the scope of this example
  -->
  
  ...
@@ -148,36 +160,46 @@ global settings
    <name>ingest.data.types</name>
    <value>myjson,...</value>
    <description>
-     Comma-delimited list of data types to be processed by the system. The {data.name} value for your
-     data type MUST appear in this list in order for it to be processed 
+     Comma-delimited list of data types to be processed by the system. The
+     {data.name} value for your data type MUST appear in this list in order for
+     it to be processed 
    </description>
  </property>
- 
  ...
- 
+ ...
  <property>
    <name>event.discard.interval</name>
    <value>0</value>
    <description>
-     Per the DataWave data model, each data object (a.k.a. "event") has an associated date which is used
-     to determine the object's YYYYMMDD shard partition within the primary data table. The value of this
-     property is defined in milliseconds and denotes that an object having a date prior to
-     (NOW - event.discard.interval) should be discarded. E.g., use a value of (1000 x 60 x 60 x 24)
-     to automatically discard objects more than 24 hrs old  
-      - A value of 0 disables this check
-      - A data type can override this value with its own "{data.name}.event.discard.interval" property
+     Per the DataWave data model, each data object (a.k.a. "event") has an
+     associated date which is used to determine the object's YYYYMMDD shard
+     partition within the primary data table. The value of this property is
+     defined in milliseconds and denotes that an object having a date prior to
+     (NOW - event.discard.interval) should be discarded.
+     
+     E.g., use a value of (1000 x 60 x 60 x 24) to automatically discard
+     objects more than 24 hrs old
+       
+     - A value of 0 disables this check
+     - A data type can override this value with its own
+       "{data.name}.event.discard.interval" property
    </description>
  </property>
+ ...
+ <!-- 
+      The remaining settings in this file are beyond the scope of this example,
+      and will be covered later 
+ -->
  ...
 </configuration>
 
 ```
 </div>
-</div>
+<div role="tabpanel" class="tab-pane" id="other-configs" markdown="1">
 
-### Additional Considerations
+### Step 3: Additional Considerations
 
-#### The special 'ALL' data type config
+#### 3.1: The 'ALL' Data Type Config
 
 The config file, [all-config.xml][dw_blob_all_config], may be used for settings that we wish to apply to *all* registered data types.
 
@@ -186,45 +208,305 @@ The config file, [all-config.xml][dw_blob_all_config], may be used for settings 
 ```xml
 <configuration>
  ...
+ ...
  <property>
      <name>all.handler.classes</name>
-     <value>datawave.ingest.mapreduce.handler.edge.ProtobufEdgeDataTypeHandler</value>
+     <value>
+       datawave.ingest.mapreduce.handler.edge.ProtobufEdgeDataTypeHandler,
+       datawave.ingest.mapreduce.handler.dateindex.DateIndexDataTypeHandler
+     </value>
      <description>
-       Comma-delimited list of data type handlers to be utilized by all registered types, in
-       *addition* to any distinct handlers set by the individual data types via their *-config.xml files.
+       Comma-delimited list of data type handlers to be utilized by all
+       registered types, in *addition* to any distinct handlers set by the
+       individual data types via their *-config.xml files.
      </description>
  </property>
+ ...
  ...
  <property>
      <name>all.ingest.policy.enforcer.class</name>
      <value>datawave.policy.IngestPolicyEnforcer$NoOpIngestPolicyEnforcer</value>
      <description>
-        Name of the class to use for record-level (or per-data object) policy enforcement
+        Name of the class to use for record-level (or per-data object) policy
+        enforcement
      </description>
  </property>
+ ...
+ <!-- 
+     The remaining settings in this file are beyond the scope of this example,
+     and will be covered later 
+ -->
  ...
 </configuration>
 ```
 
-#### Edge definition configs
+#### 3.2: Edge Definitions
 
 The config file, [edge-definitions.xml][dw_blob_edge_config], may be used to define various edge types, which are derived
 from our registered data types. Edges defined here are persisted in the [DataWave Edge Table](../getting-started/data-model#edge-table).
+Our **myjson** data type defines multiple edge types based on the fields present in the *TVMAZE-API* schema.
 
 **Deploy directory**: $DATAWAVE_INGEST_HOME/config/
 
-For example, the *ProtobufEdgeDataTypeHandler* class is responsible for generating graph edges from incoming data objects.
+Note that the *ProtobufEdgeDataTypeHandler* class is responsible for generating graph edges from incoming data objects.
 Thus, it leverages this config file to determine how and when to create edge key/value pairs.
-
-Our **myjson** data type defines multiple edge types based on the fields present in the *TVMAZE-API* dataset
 
 {% include edge-dictionary-note.html %}
 
+</div>
+</div>
+
+## Load Some New Data
+
+Lastly, we'll fetch some new data via the TVMAZE-API service and we'll load it into DataWave.
+
+<ul id="profileTabs" class="nav nav-tabs">
+    <li class="active"><a class="noCrossRef" href="#get-data" data-toggle="tab"><b>4: Stage the Raw Data</b></a></li>
+    <li><a class="noCrossRef" href="#run-job" data-toggle="tab"><b>5: Run the Ingest M/R Job</b></a></li>
+</ul>
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane active" id="get-data" markdown="1">
+### Step 4: Stage the Raw Data
+
+Here we use the quickstart's [ingest-tv-shows.sh][dw_blob_ingest_tv_shows] script to fetch additional TV shows along
+with cast member information. If you wish, the default list of shows to download may be overridden by passing your
+own comma-delimited list of show names via the `--shows` argument.
+
+Use the `--help` option for more information.
+
+The script simply iterates over the specified list of TV show names, invokes
+<http://api.tvmaze.com/singlesearch/shows?q=SHOWNAME&embed=cast> for each show, and appends each search result to the
+output file specified by `--outfile`
+
+```bash
+ $ cd DW_SOURCE/contrib/datawave-quickstart/bin/services/datawave/ingest-examples
+ 
+ # We'll use the --download-only flag to write the data to a local file only,
+ # to avoid ingesting the data automatically...
+
+ $ ./ingest-tv-shows.sh --download-only --outfile ~/more-tv-shows.json
+ 
+ [DW-INFO] - Writing json records to /home/me/more-tv-shows.json
+ [DW-INFO] - Downloading show data: 'Veep'
+ [DW-INFO] - Downloading show data: 'Game of Thrones'
+ [DW-INFO] - Downloading show data: 'I Love Lucy'
+ [DW-INFO] - Downloading show data: 'Breaking Bad'
+ [DW-INFO] - Downloading show data: 'Malcom in the Middle'
+ [DW-INFO] - Downloading show data: 'The Simpsons'
+ [DW-INFO] - Downloading show data: 'Sneaky Pete'
+ [DW-INFO] - Downloading show data: 'King of the Hill'
+ [DW-INFO] - Downloading show data: 'Threes Company'
+ [DW-INFO] - Downloading show data: 'The Andy Griffith Show'
+ [DW-INFO] - Downloading show data: 'Matlock'
+ [DW-INFO] - Downloading show data: 'North and South'
+ [DW-INFO] - Downloading show data: 'MASH'
+ [DW-INFO] - Data download is complete
+
+```
+</div>
+<div role="tabpanel" class="tab-pane" id="run-job" markdown="1">
+### Step 5: Run the Ingest M/R Job
+
+All that's left now is to write the raw data to HDFS and then invoke DataWave's [IngestJob][dw_blob_ingest_job] class
+with the appropriate parameters. To accomplish both, we'll simply invoke a quickstart utility function,
+[datawaveIngestJson](../getting-started/quickstart-reference#datawave-ingest-functions)
+
+This function has only one required parameter, the path of our raw data file, but the function will display the
+actual bash commands that are used to ingest the file, as shown below.
+
+They key thing to note here is that DataWave's [live-ingest.sh][dw_blob_live_ingest_sh] script is used, which passes the
+`-outputMutations` and `-mapOnly` flags to the IngestJob class to enable "live" mode. Live mode results in a MapReduce
+job in which the map tasks write DataWave key/value pairs directly into Tablet Server memory via Accumulo *BatchWriter*
+
+```bash
+ # Quickstart utility function...
+
+ $ datawaveIngestJson ~/more-tv-shows.json
+
+ [DW-INFO] - Initiating DataWave Ingest job for '~/more-tv-shows.json'
+ [DW-INFO] - Loading raw data into HDFS:
+ 
+   # Here's the command to write the raw data to HDFS...
+   hdfs dfs -copyFromLocal ~/more-tv-shows.json /Ingest/myjson
+
+ [DW-INFO] - Submitting M/R job:
+ 
+   # And here's the command to submit the ingest job. The "live-ingest.sh" script
+   # passes the parameters below and others to DataWave's IngestJob class...
+   $DATAWAVE_INGEST_HOME/bin/ingest/live-ingest.sh /Ingest/myjson/more-tv-shows.json 1 \
+      -inputFormat datawave.ingest.json.mr.input.JsonInputFormat \
+      -data.name.override=myjson
+ ...
+ ...
+ 18/04/01 19:45:43 INFO mapreduce.Job: Running job: job_1523209920746_0004
+ 18/04/01 19:45:48 INFO mapreduce.Job: Job job_1523209920746_0004 running in uber mode : false
+ 18/04/01 19:45:48 INFO mapreduce.Job:  map 0% reduce 0%
+ 18/04/01 19:45:55 INFO mapreduce.Job:  map 100% reduce 0%
+ 18/04/01 19:45:55 INFO mapreduce.Job: Job job_1523209920746_0004 completed successfully
+ 18/04/01 19:45:55 INFO mapreduce.Job: Counters: 43
+ 	File System Counters
+ 		FILE: Number of bytes read=0
+ 		FILE: Number of bytes written=188556
+ 		FILE: Number of read operations=0
+ 		FILE: Number of large read operations=0
+ 		FILE: Number of write operations=0
+ 		HDFS: Number of bytes read=394045
+ 		HDFS: Number of bytes written=0
+ 		HDFS: Number of read operations=3
+ 		HDFS: Number of large read operations=0
+ 		HDFS: Number of write operations=0
+ 	Job Counters 
+ 		Launched map tasks=1
+ 		Data-local map tasks=1
+ 		Total time spent by all maps in occupied slots (ms)=8842
+ 		Total time spent by all reduces in occupied slots (ms)=0
+ 		Total time spent by all map tasks (ms)=4421
+ 		Total vcore-seconds taken by all map tasks=4421
+ 		Total megabyte-seconds taken by all map tasks=9054208
+ 	Map-Reduce Framework
+ 		Map input records=13
+ 		Map output records=19584
+ 		Input split bytes=119
+ 		Spilled Records=0
+ 		Failed Shuffles=0
+ 		Merged Map outputs=0
+ 		GC time elapsed (ms)=128
+ 		CPU time spent (ms)=9650
+ 		Physical memory (bytes) snapshot=311042048
+ 		Virtual memory (bytes) snapshot=2908852224
+ 		Total committed heap usage (bytes)=253427712
+ 	Content Index Counters
+ 		Document synonyms processed=24
+ 		Document tokens processed=2083
+ 	EVENTS_PROCESSED
+ 		MYJSON=13
+ 	FILE_NAME
+ 		hdfs://localhost:9000/Ingest/myjson/more-tv-shows.json=1
+ 	LINE_BYTES
+ 		MAX=64184
+ 		MIN=4686
+ 		TOTAL=250260
+ 	ROWS_CREATED
+ 		ContentJsonColumnBasedHandler=12231
+ 		DateIndexDataTypeHandler=0
+ 		ProtobufEdgeDataTypeHandler=8672
+ 	datawave.ingest.metric.IngestOutput
+ 		DUPLICATE_VALUE=1563
+ 		MERGED_VALUE=9104
+ 		ROWS_CREATED=20903
+ 	File Input Format Counters 
+ 		Bytes Read=393926
+ 	File Output Format Counters 
+ 		Bytes Written=0
+ 18/04/01 19:45:55 INFO datawave.ingest: Counters: 43
+ 	File System Counters
+ 		FILE: Number of bytes read=0
+ 		FILE: Number of bytes written=188556
+ 		FILE: Number of read operations=0
+ 		FILE: Number of large read operations=0
+ 		FILE: Number of write operations=0
+ 		HDFS: Number of bytes read=394045
+ 		HDFS: Number of bytes written=0
+ 		HDFS: Number of read operations=3
+ 		HDFS: Number of large read operations=0
+ 		HDFS: Number of write operations=0
+ 	Job Counters 
+ 		Launched map tasks=1
+ 		Data-local map tasks=1
+ 		Total time spent by all maps in occupied slots (ms)=8842
+ 		Total time spent by all reduces in occupied slots (ms)=0
+ 		Total time spent by all map tasks (ms)=4421
+ 		Total vcore-seconds taken by all map tasks=4421
+ 		Total megabyte-seconds taken by all map tasks=9054208
+ 	Map-Reduce Framework
+ 		Map input records=13
+ 		Map output records=19584
+ 		Input split bytes=119
+ 		Spilled Records=0
+ 		Failed Shuffles=0
+ 		Merged Map outputs=0
+ 		GC time elapsed (ms)=128
+ 		CPU time spent (ms)=9650
+ 		Physical memory (bytes) snapshot=311042048
+ 		Virtual memory (bytes) snapshot=2908852224
+ 		Total committed heap usage (bytes)=253427712
+ 	Content Index Counters
+ 		Document synonyms processed=24
+ 		Document tokens processed=2083
+ 	EVENTS_PROCESSED
+ 		MYJSON=13
+ 	FILE_NAME
+ 		hdfs://localhost:9000/Ingest/myjson/more-tv-shows.json=1
+ 	LINE_BYTES
+ 		MAX=64184
+ 		MIN=4686
+ 		TOTAL=250260
+ 	ROWS_CREATED
+ 		ContentJsonColumnBasedHandler=12231
+ 		DateIndexDataTypeHandler=0
+ 		ProtobufEdgeDataTypeHandler=8672
+ 	datawave.ingest.metric.IngestOutput
+ 		DUPLICATE_VALUE=1563
+ 		MERGED_VALUE=9104
+ 		ROWS_CREATED=20903
+ 	File Input Format Counters 
+ 		Bytes Read=393926
+ 	File Output Format Counters
+ 		Bytes Written=0
+ 	...
+ 	...
+
+ # Use the Accumulo shell to verify the new TV shows were loaded into
+ # the primary data table (ie, the "shard" table in the quickstart env)...
+ 	
+ $ ashell
+ 
+   Shell - Apache Accumulo Interactive Shell
+   -
+   - version: 1.8.1
+   - instance name: my-instance-01
+   - instance id: cc3e8158-a94a-4f2e-af9e-d1014b5d1912 
+   -
+   - type 'help' for a list of available commands
+   -
+   root@my-instance-01> grep Veep -t shard
+
+```
+</div>
+</div>
+
 ## In Review
 
+In **Steps 1**, **2** and **3**, we looked at a few of the most important configuration properties for establishing a
+data type within the DataWave Ingest framework
 
+* *data.name*, and optionally *{data.name}.output.name*, uniquely identify a data type and its associated raw data feed.
+  These properties can be leveraged to split up a single data type over multiple data feeds, if needed
+  
+* *file.input.format*, *{data.name}.reader.class*, *{data.name}.ingest.helper.class*, *{data.name}.handler.classes*, and
+  *all.handler.classes* together define the DataWave Ingest API processing pipeline, for transforming raw data into
+   Accumulo key/value pairs
 
+In **Steps 4** and **5**, we acquired some new raw data via the TVMAZE-API service and we ingested it via MapReduce
+
+* We loaded the raw data into HDFS with a simple copy command...
+  ```bash
+    hdfs dfs -copyFromLocal ~/more-tv-shows.json /Ingest/myjson
+  ```
+
+* Finally, we used DataWave's [live-ingest.sh][dw_blob_live_ingest_sh] script to kick off the MapReduce job. This script passes
+  the`-outputMutations` and `-mapOnly` flags to the [IngestJob][dw_blob_ingest_job] class to enable "live" mode...
+  ```bash
+    $DATAWAVE_INGEST_HOME/bin/ingest/live-ingest.sh \
+      /Ingest/myjson/more-tv-shows.json 1 \
+      -inputFormat datawave.ingest.json.mr.input.JsonInputFormat \
+      -data.name.override=myjson
+  ```
+  
 [dw_blob_myjson_config]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/myjson-ingest-config.xml
 [dw_blob_ingest_config]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/ingest-config.xml
 [dw_blob_all_config]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/all-config.xml
 [dw_blob_edge_config]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/edge-definitions.xml
+[dw_blob_ingest_tv_shows]: https://github.com/NationalSecurityAgency/datawave/blob/master/contrib/datawave-quickstart/bin/services/datawave/ingest-examples/ingest-tv-shows.sh
+[dw_blob_ingest_job]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-core/src/main/java/datawave/ingest/mapreduce/job/IngestJob.java
+[dw_blob_live_ingest_sh]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-scripts/src/main/resources/bin/ingest/live-ingest.sh

@@ -4,10 +4,11 @@ tags: [getting_started, query]
 summary: This page gives an overview of DataWave's JEXL and Lucene query syntax options
 ---
 <h2>Introduction</h2>
-<p>DataWave's query logic implementations will typically accept expressions conforming to either JEXL syntax (the default)
-   or our modified Lucene syntax. As for JEXL, DataWave supports a subset of the language elements in the Apache Commons JEXL
-   grammar, and implements some of its own custom JEXL functions as well. As a convenience, DataWave has also enabled Lucene syntax
-   support, which, except where noted, provides equivalent functionality to JEXL
+<p>DataWave's <a href="development#query-logic-components">query logic</a> implementations will typically accept expressions
+   conforming to either JEXL syntax (the default) or our modified Lucene syntax. As for JEXL, DataWave supports a subset of
+   the language elements in the <a href="https://commons.apache.org/proper/commons-jexl/reference/syntax.html" target="_blank">Apache
+   Commons JEXL grammar</a>, and implements some of its own custom JEXL functions as well. As a convenience, DataWave has
+   also enabled Lucene syntax support, which, except where noted, provides equivalent functionality to JEXL
 </p>
 <h2>JEXL Query Syntax</h2>
 <hr />
@@ -21,6 +22,8 @@ summary: This page gives an overview of DataWave's JEXL and Lucene query syntax 
     <li>&ge;</li>
     <li>=~ (regex)</li>
     <li>!~ (negative regex)</li>
+    <li>|| , or</li>
+    <li>&amp;&amp; , and</li>
 </ul>
 <hr />
 <h3>Custom JEXL Functions</h3>
@@ -51,8 +54,8 @@ summary: This page gives an overview of DataWave's JEXL and Lucene query syntax 
 </p>
 <p>
   As a convenience, DataWave does provide support for unfielded JEXL queries, at least for the subset of 
-  <a href="../development/query-api#query-logic-components">query logic</a> types that are designed to retrieve objects from the 
-  <a href="data-model#primary-data-table">primary data table</a>. However, to achieve this with JEXL, the user must add the 
+  <a href="development#query-logic-components">query logic</a> types that are designed to retrieve objects from the 
+  <a href="../getting-started/data-model#primary-data-table">primary data table</a>. However, to achieve this with JEXL, the user must add the 
   internally-recognized pseudo field, <b>_ANYFIELD_</b>, to the query in order for it to pass syntax validation.
   See the examples below for usage.
 </p>

@@ -45,18 +45,6 @@ entries:
         - title: Troubleshooting
           url: /docs/2.1/getting-started/quickstart-trouble
 
-  - title: Tour
-    folderitems:
-    - title: Getting Started
-      url: /docs/2.1/tour/getting-started
-
-    - title: Ingest Basics
-      url: /docs/2.1/tour/ingest-basics
-
-    - title: Query Basics
-      url: /docs/2.1/tour/query-basics
-
-
   - title: Ingest
     folderitems:
 
@@ -89,3 +77,14 @@ entries:
 
     - title: Configuration
       url: /docs/2.1/query/configuration
+
+  - title: Tour
+    folderitems:
+    - title: Getting Started
+      url: /docs/2.1/tour/getting-started
+
+    - title: Ingest Basics
+      url: /docs/2.1/tour/ingest-basics
+
+    - title: Query Basics
+      url: /docs/2.1/tour/query-basics

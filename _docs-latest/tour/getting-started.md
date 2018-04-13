@@ -13,12 +13,14 @@ summary: |
 
 At this point, you should have a standalone DataWave Quickstart environment instantiated. Throughout the tour, we'll be
 using its example datasets, its pre-built configs, and many of its [utility functions](../getting-started/quickstart-reference).
-Follow the steps below to ensure that your environment is up and functioning as required.
 
-### Check the Status of Your Services
-
-Execute the quickstart's `allStatus` function to show the PIDs of your running DataWave services. If DataWave Ingest
-isn't running, that's fine. We'll start it up later on in the tour
+<ul id="profileTabs" class="nav nav-tabs">
+    <li class="active"><a class="noCrossRef" href="#check-services" data-toggle="tab"><b>1: Check Status of Services</b></a></li>
+    <li><a class="noCrossRef" href="#verify-web" data-toggle="tab"><b>2: Verify DataWave Web Deployment</b></a></li>
+</ul>
+<div class="tab-content">
+<div role="tabpanel" class="tab-pane active" id="check-services" markdown="1">
+### Step 1: Check the Status of Your Services
 
 ```bash
  $ allStatus
@@ -26,15 +28,20 @@ isn't running, that's fine. We'll start it up later on in the tour
     Accumulo is running. PIDs: 11196 11326 11536 11645 11750 11081
     DataWave Ingest is not running
     DataWave Web is running. PIDs: 17462
+    
+ # If DataWave Ingest is running, stop it for now...
+ $ datawaveIngestStop
+   ...
 ```
-
-### Check Your DataWave Web Deployment
-
-If DataWave Web is not currently running, then perform the commands shown below to verify that web services are up
-and functioning as required
+If no services are currently running, go to **Step 2**
+</div>
+<div role="tabpanel" class="tab-pane" id="verify-web" markdown="1">
+### Step 2: Verify Your DataWave Web Deployment
 
 ```bash
- $ datawaveWebStart # Will start up web services along with any dependencies, if needed
+ # If DataWave Web is not currently running, start it up with this function...
+ # (this will also start Hadoop, Accumulo, ZooKeeper, if needed)
+ $ datawaveWebStart
  
  [DW-INFO] - Starting Wildfly
  [DW-INFO] - Polling for EAR deployment status every 4 seconds (15 attempts max)
@@ -42,13 +49,12 @@ and functioning as required
      +- Wildfly up (7663). EAR deployment pending (2/15)
         ...
         ...
-     ++ DataWave Web successfully deployed ...
-
- [DW-INFO] - Documentation: https://localhost:8443/DataWave/doc
- [DW-INFO] - Data Dictionary: https://localhost:8443/DataWave/DataDictionary
+     ++ DataWave Web successfully deployed
 ```
+
 ```bash
- $ datawaveWebTest # Execute pre-configured, curl-based tests against the REST API
+ # All of the pre-configured web tests should pass...
+ $ datawaveWebTest
    ...
    ...
    QueryMetricsQueryCreateAndNext
@@ -57,10 +63,11 @@ and functioning as required
    
    Failed Tests: 0 
 ```
+</div>
+</div>
 
 ## Troubleshooting
 
-If you experience any issues with your environment during this or any subsequent exercises, please see the
-[troubleshooting guide](../getting-started/quickstart-trouble) for help before proceeding. 
+If you experience issues with the quickstart environment at any time, please see the [troubleshooting guide](../getting-started/quickstart-trouble) 
 
 
