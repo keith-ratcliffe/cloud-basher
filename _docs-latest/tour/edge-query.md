@@ -9,9 +9,9 @@ summary: |
 
 ## Edge Query Model
 
-As discussed [earlier](ingest-basics) in the tour of ingest, graph [edges](../getting-started/data-model#edge-table) may be created
-from 
- 
+As discussed in the [ingest tour](ingest-basics), graph [edges](../getting-started/data-model#edge-table) may
+be defined via configuration, and they are derived from {% include data-model-term.html term_id="NFV" display="name" %}
+pairs within a given {% include data-model-term.html term_id="DO" display="name" %}.
 
 ### The Query Expression
 
