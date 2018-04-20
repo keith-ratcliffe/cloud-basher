@@ -26,9 +26,21 @@ integrate DataWave query clients into their existing security infrastructure.
 DataWave is written in Java and its core services are built upon an extensible software architecture. Its primary components
 are its [ingest](../ingest/overview) and [query](../query/overview) frameworks. Both were designed to support a high degree
 of customization, through highly configurable application components and through extensible software interfaces.
-To get started, check out the [quickstart install](quickstart-install) and the [guided tour](../tour/getting-started) docs.
 
----
+## System Architecture
+
+If necessary, DataWave's ingest and query components can easily be decoupled and hosted on distinct clusters, as shown
+below. In this configuration, ingest processing is performed on dedicated resources so that user queries may be given
+priority over CPU, memory, and network resources within the data warehouse cluster. However, if resource contention
+between ingest processing and query processing is not a concern, then DataWave may just as easily be configured to operate
+on a single, shared environment.
+
+{% include image.html file="dw-system-overview.png" alt="DataWave System Overview" %}
+
+Whether or not the ingest and warehouse clusters are distinct, raw data to be ingested may arrive in a staging area for
+pre-processing, if needed, or it may be written directly to HDFS. Once the data arrives in HDFS, DataWave will process it
+via MapReduce and ultimately write the MapReduce output to DataWave's Accumulo [tables](data-model) in the data
+warehouse. Query clients then utilize DataWave's web services to retrieve data of interest from the warehouse.
 
 [apache_accumulo]: http://accumulo.apache.org/
 [apache_hadoop]: http://hadoop.apache.org/

@@ -12,9 +12,9 @@ summary: |
 Here, we'll construct a simple query that uses the *GENRES* field from our **tvmaze** data type to find TV shows in the
 action and adventure genres.
 
-{% include data-dictionary-note.html %}
+{% include data_dictionary_note.html %}
 
-{% include tvmaze-note.html %}
+{% include tvmaze_note.html %}
 
 ### The Query Expression
 
@@ -92,7 +92,7 @@ To initialize our query, we invoked **DataWave/Query/{ query-logic }/create** us
 * *EventQuery* is the main [query logic](../query/development#query-logic-components) for retrieving data objects
   from DataWave's [primary data table](../getting-started/data-model#primary-data-table). Semantically, the term *event*
   simply reflects the fact that these data objects are sorted and partitioned primarily by date. The date value assigned
-  to a given object for this purpose is typically user-specified, per-data type via ingest configuration
+  to a given object for this purpose is typically user-specified, per data type via ingest configuration
   
 * Query logics are typically configured in the web service via Spring XML files such as [this one][dw_blob_qlf_xml]
   

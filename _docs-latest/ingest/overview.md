@@ -6,18 +6,19 @@ toc: false
 
 ## MapReduce API
 
-To load data into Accumulo, DataWave Ingest provides an API that utilizes MapReduce as its basis. This framework is
-highly scalable and is designed to support extensive customization through [configuration](configuration) alone. For
-example, DataWave can be configured to ingest arbitrarily-defined data schemas with no software development required,
-provided that the ingested schemas are encoded in common file formats such as CSV, JSON, etc.
+To load data into its Accumulo [tables](../getting-started/data-model), DataWave provides an API that utilizes MapReduce
+as its basis. This framework is highly scalable and is designed to support extensive customization through
+[configuration](configuration) alone. For example, DataWave can be configured to ingest arbitrarily-defined data schemas
+with no software development required, provided that the ingested schemas are encoded in common file formats such as CSV,
+JSON, etc.
 
 DataWave Ingest can also be extended to accept *new* file formats with minimal software development. Typically,
 this is accomplished by extending one or more base classes within the [API](development) and by implementing
 familiar Hadoop MapReduce abstractions such as *InputFormat* and *RecordReader*.
  
 Within this framework, distributed *map* tasks perform the work of transforming your raw data objects into [Accumulo
-key/value pairs][acc_data_model]. These are created in accordance with the DataWave
-[data model](../getting-started/data-model) and as prescribed by any user-supplied configuration.
+key/value pairs][acc_data_model]. These are created in accordance with the DataWave data model and as prescribed by any
+user-supplied configuration.
 
 ## Live Ingest
 

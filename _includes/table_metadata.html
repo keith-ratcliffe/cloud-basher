@@ -1,6 +1,6 @@
 <table>
   <caption>Data Dictionary Table Layout</caption>
-  <thead><tr><th>Row</th><th>Column&nbsp;Family (String Literal)</th><th>Column Qualifier</th><th>Value</th><th>Purpose</th></tr></thead>
+  <thead><tr><th>Row</th><th>Column&nbsp;Family</th><th>Column&nbsp;Qualifier</th><th>Value</th><th>Purpose</th></tr></thead>
   <tbody>
 
   {% assign tables = site.data.data-model.tables | where:"id","DDT" %}
@@ -30,14 +30,7 @@
             <em>{{ td_raw }}</em>
         {% else %}
             {% assign terms = td_raw | split: '+' %}
-            {% for term in terms %}
-                {% assign strip_term = term | strip %}
-                {% assign dictionary_entry = site.data.data-model.terms | where:"id",strip_term %}
-                <a href="#terms-and-definitions" data-toggle="tooltip" data-original-title="{{ dictionary_entry[0].name }} :: {{ dictionary_entry[0].info }}">{{ strip_term }}</a>
-                {% unless forloop.last %}
-                    &nbsp;+
-                {% endunless %}
-            {% endfor %}
+            {% include set_table_entry_tooltips.html entry_terms=terms %}
         {% endif %}
     </td>
     {% endfor %}

@@ -12,9 +12,9 @@ summary: |
 DataWave Ingest is largely driven by configuration. Below we'll use DataWave's example *tvmaze* data type (*myjson* config)
 to examine the basic settings used to establish a data type within the ingest framework.
 
-{% include data-dictionary-note.html %}
+{% include data_dictionary_note.html %}
 
-{% include tvmaze-note.html %}
+{% include tvmaze_note.html %}
 
 <ul id="profileTabs" class="nav nav-tabs">
     <li class="active"><a class="noCrossRef" href="#define-type" data-toggle="tab"><b>1: Define the Data Type</b></a></li>
@@ -242,16 +242,16 @@ The config file, [all-config.xml][dw_blob_all_config], may be used for settings 
 
 #### 3.2: Edge Definitions
 
-The config file, [edge-definitions.xml][dw_blob_edge_config], may be used to define various edge types, which are derived
-from our registered data types. Edges defined here are persisted in the [DataWave Edge Table](../getting-started/data-model#edge-table).
-Our **myjson** data type defines multiple edge types based on the fields present in the *TVMAZE-API* schema.
+The example config file, [edge-definitions.xml][dw_blob_edge_config], is used to define various [edges](../getting-started/data-model#edge-table),
+all of which are derived from our example data types. Our **myjson** data type defines multiple edge types based on the
+fields present in the *TVMAZE-API* schema.
 
 **Deploy directory**: $DATAWAVE_INGEST_HOME/config/
 
 Note that the *ProtobufEdgeDataTypeHandler* class is responsible for generating graph edges from incoming data objects.
 Thus, it leverages this config file to determine how and when to create edge key/value pairs.
 
-{% include edge-dictionary-note.html %}
+{% include edge_dictionary_note.html %}
 
 </div>
 </div>
@@ -267,6 +267,13 @@ data type within the DataWave Ingest framework
 * **{data.name}.reader.class**, **{data.name}.ingest.helper.class**, **{data.name}.handler.classes**, and
   **all.handler.classes** together define processing pipeline for a given data type, in order to transform raw input
   into [data objects](../getting-started/data-model#primary-data-table) comprised of Accumulo key/value pairs
+  
+* The **all-config.xml** file can be used to control various ingest behaviors for *all* registered data types
+
+* Graph edges in DataWave are composed of {% include data_model_term.html term_id="NFV" display="name" %}
+  pairs known to exist within the {% include data_model_term.html term_id="DO" display="name" %}s of DataWave's registered
+  data types. Thus, edge types are defined via configuration on a per-data type basis. Given a single data object as input,
+  DataWave Ingest may emit zero or more edges based on this configuration.
 </div>
 
 ---
@@ -332,7 +339,11 @@ with the appropriate parameters. To accomplish both, we'll simply invoke a quick
 This quickstart function also displays the actual bash commands required to ingest the file, as shown below.
 
 They key thing to note here is that DataWave's [live-ingest.sh][dw_blob_live_ingest_sh] script is used, which passes
-flags to the IngestJob class to enable [Live Ingest](../ingest/overview#live-ingest) mode.
+arguments to the IngestJob class in order to enable [Live Ingest](../ingest/overview#live-ingest) mode for our data.
+
+{% include note.html content="Typically, MapReduce job submission for a particular data type is automated by a DataWave
+   [Flag Maker](../ingest/data-flow#the-flag-maker) process. Configuring and running a flag maker is beyond the scope of
+   this exercise" %}
 
 ```bash
  # Quickstart utility function...
@@ -511,7 +522,7 @@ In **Steps 4** and **5**, we acquired some new raw data via the TVMAZE-API servi
      1 \                                                           # $NUM_SHARDS (i.e., number of reducers)
      -inputFormat datawave.ingest.json.mr.input.JsonInputFormat \  # Overrides IngestJob's default input format
      -data.name.override=myjson                                    # Forces the job to use our 'myjson' config
-  ```
+  ``` 
 </div>
   
 [dw_blob_myjson_config]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/myjson-ingest-config.xml

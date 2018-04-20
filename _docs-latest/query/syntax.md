@@ -87,6 +87,111 @@ fuzzy, and the implicit operator is <b>AND</b> instead of <b>OR</b>.
 <p>Note that to search for punctuation characters within a term, you need to escape it with a backslash.</p>
 <hr/>
 <h2>JEXL and Lucene Examples</h2>
+
+<h3>Example Queries</h3>
+<table>
+    <tr><th>JEXL Query</th><th>Lucene Query</th></tr>
+    <tr class="highlight">
+       <td>_ANYFIELD_ == 'SomeValue'</td><td>SomeValue</td>
+    </tr>
+    <tr>
+        <td>(_ANYFIELD_ == 'AAA' &amp;&amp; _ANYFIELD_ == 'BBB') &amp;&amp; (_ANYFIELD_ == 'CCC' || _ANYFIELD_ == 'DDD')</td><td>(AAA BBB) (CCC OR DDD)</td>
+    </tr>   
+    <tr class="highlight">
+        <td>FIELDNAME == 'SomeValue'</td><td>FIELDNAME:SomeValue</td>
+    </tr>
+    <tr>
+        <td>FIELDNAME =~ 'SomeVal.*'</td><td>FIELDNAME:SomeVal*</td>
+    </tr>
+    <tr class="highlight">
+        <td>(FIELD1 == 'AAA' &amp;&amp; FIELD2 == 'BBB') &amp;&amp; (FIELD3 == 'CCC' || FIELD3 == 'DDD')</td><td>(FIELD1:AAA FIELD2:BBB) (FIELD3:CCC OR FIELD3:DDD)</td>
+    </tr>
+    <tr>
+        <td>TEXT_FIELD == 'TextValue' &amp;&amp; f:between(NUMBER_FIELD,1, 10)</td><td>TEXT_FIELD:TextValue AND NUMBER_FIELD:[1 TO 10]</td>
+    </tr>
+</table>
+
+<h3>Support for Hierarchical Data</h3>
+
+DataWave also allows for queries that leverage the hierarchical context of nested data types such as JSON and XML,
+provided that the structure of the data is preserved during ingest by using the "grouping" notation that DataWave
+understands.
+
+For example, consider the XML objects below...  
+
+**Data Object 1**
+```xml
+   <foo>
+      <parent>
+         <child>
+            <field>A</field>
+         </child>
+         <child>
+            <field>B</field>
+         </child>
+      </parent>
+   </foo>
+```
+**Data Object 2**
+```xml
+   <bar>
+      <field>A</field>
+      <field>B</field>
+   </bar>
+```
+
+The field name/value pairs above may be stored logically in Accumulo as **{FIELD NAME}.{GROUPING CONTEXT} = {VALUE}**,
+where the grouping context preserves the fully-qualified path to the name/value pair and also conveys its relative position
+within the hierarchy. Thus, given the XML above, we could flatten the data objects and store the name/value pairs in
+Accumulo as follows...     
+
+```bash
+  # Data Object 1...
+  FIELD.FOO_0.PARENT_0.CHILD_0.FIELD_0 = A
+  FIELD.FOO_0.PARENT_0.CHILD_1.FIELD_0 = B
+  -------------------------
+  # Data Object 2...
+  FIELD.BAR_0.FIELD_0 = A
+  FIELD.BAR_0.FIELD_1 = B
+```
+
+As a result, the following simple query in DataWave could be used to return *both* objects above as two distinct search results...
+
+<table>
+    <tr><th>JEXL Query</th><th>Lucene Query</th></tr>
+    <tr class="highlight"><td>FIELD == 'A' &amp;&amp; FIELD == 'B'</td><td>FIELD:A FIELD:B</td></tr>
+</table>
+
+Both objects would be returned above. However, they clearly represent two different schemas, and we might not want both to appear in our search
+results. To disambiguate the two objects, we can use the following function...
+
+<table>
+    <tr><th>JEXL Function</th><th>Lucene Function</th></tr>
+    <tr class="highlight"><td>grouping:matchesInGroupLeft(F1, 'V1', F2, 'V2', ..., Fn, 'Vn', INTEGER)</td><td>#MATCHES_IN_GROUP_LEFT(F1, 'V1', F2, 'V2', ..., Fn, 'Vn', INTEGER)</td></tr>
+</table>
+
+The INTEGER parameter denotes the level in the tree where the matching field name/value pairs must exist in order to
+constitute a match. Its values are defined as follows...
+
+* 0 : Fields are siblings / same parent element
+* 1 : Fields are cousins / same grandparent element
+* 2 : Fields are 2nd cousins / same great-grandparent element
+* And so on...
+
+For example, to retrieve *Data Object 1* above, we might use the following query...
+
+<table>
+    <tr><th>JEXL Function</th><th>Lucene Function</th></tr>
+    <tr class="highlight"><td>FIELD == 'A' &amp;&amp; grouping:matchesInGroupLeft(FIELD, 'A', FIELD, 'B', 1)</td><td>FIELD:A AND #MATCHES_IN_GROUP_LEFT(FIELD, 'A', FIELD, 'B', 1)</td></tr>
+</table>
+
+Likewise, to exclude *Data Object 1* and return only *Data Object 2*, we could do the following...
+
+<table>
+    <tr><th>JEXL Function</th><th>Lucene Function</th></tr>
+    <tr class="highlight"><td>FIELD == 'A' &amp;&amp; grouping:matchesInGroupLeft(FIELD, 'A', FIELD, 'B', 0)</td><td>FIELD:A AND #MATCHES_IN_GROUP_LEFT(FIELD, 'A', FIELD, 'B', 0)</td></tr>
+</table>
+
 <h3>Custom Lucene Functions</h3>
 <p>DataWave has augmented Lucene to provide support for several JEXL features that were not supported natively. 
    The table below maps the JEXL operators to the supported Lucene syntax

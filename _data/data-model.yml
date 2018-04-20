@@ -20,7 +20,9 @@ terms:
 
   - id: DO
     name: Data Object
-    info: A real-life object for which field names and field values can be derived
+    info: |
+       A real-life object for which field names and field values can be derived. Typically, use of this term will
+       denote an object stored within DataWave's primary data table
 
   - id: DT
     name: Data Type
@@ -95,15 +97,15 @@ terms:
 
   - id: NCN
     name: Normalizer Class Name
-    info: The fully qualified name of the Normalizer class
+    info: The fully qualified name of the Normalizer (N) Java class
 
   - id: NFN
     name: Normalized Field Name
-    info: A Field Name transformed to be compatible with the query code
+    info: A Field Name (FN) transformed to be compatible with the query code
 
   - id: NFV
     name: Normalized Field Value
-    info: A Field Value that has been processed/transformed by a Normalizer
+    info: A Field Value (FV) that has been processed/transformed by a Normalizer (N)
 
   - id: NT
     name: Normalized Term
@@ -119,7 +121,7 @@ terms:
 
   - id: RNFV
     name: Reversed Normalized Field Value
-    info: A Field Value that has been processed/transformed by a Normalizer and then reversed
+    info: A Field Value (FV) that has been processed/transformed by a Normalizer (N) and then reversed
 
   - id: SHARD
     name: Shard ID
@@ -144,6 +146,12 @@ terms:
   - id: VERT
     name: Vertex
     info: A single node within a graph
+
+# Table Schema Definitions...
+
+# Note that string literal components within row, cf, cq, and val entries below should be enclosed in single quotes,
+# as this will signal that those terms should be treated them differently in code.
+# E.g., see _includes/set_table_entry_tooltips.html
 
 tables:
   - id: PDT

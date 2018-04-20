@@ -20,14 +20,7 @@
 
     {% assign terms = td_raw | split: '+' %}
     <td>
-      {% for term in terms %}
-      {% assign strip_term = term | strip %}
-      {% assign dictionary_entry = site.data.data-model.terms | where:"id",strip_term %}
-      <a href="#terms-and-definitions" data-toggle="tooltip" data-original-title="{{ dictionary_entry[0].name }} :: {{ dictionary_entry[0].info }}">{{ strip_term }}</a>
-      {% unless forloop.last %}
-      &nbsp;+
-      {% endunless %}
-      {% endfor %}
+      {% include set_table_entry_tooltips.html entry_terms=terms %}
     </td>
     {% endfor %}
     <td>
