@@ -47,23 +47,24 @@ summary: This page gives an overview of DataWave's JEXL and Lucene query syntax 
     <li>Utility Functions<ul><li>between()</li><li>length()</li></ul></li>
 </ul>
 <hr />
-<h3>A Note About Field Names</h3>
+<h2>A Note About Field Names</h2>
 <p>
 Field names in DataWave are required to conform to JEXL naming conventions. That is, a field name must contain only alphanumeric
 characters and underscores, and the name must begin with either an alphabetic character or an underscore.
 </p>
-<p>By extension, this would seem to imply that a given data object in DataWave, which may consist of one or more field-name/value pairs, is strictly
-a flat data structure, given no apparent way to encode hierarchical structure within the field names themselves.
+<h3>Structured vs Unstructured Objects</h3>
+<p>By extension, this would seem to imply that a given data object in DataWave, which is largely just a collection of field
+name/value pairs, is strictly a flat data structure, given that there is no apparent way to encode hierarchical structure
+within a JEXL field name.
 </p>
-<p>While the DataWave Query API does 
-adhere to 'flat object' semantics in most respects, it does allow the natural hierarchical structure of fields to be retained during
-data ingest, if needed.
+<p>While the DataWave Query API does adhere to 'flat object' semantics in most respects, it does allow the natural
+hierarchical structure of a field to be encoded and retained during data ingest, if needed. In fact, DataWave Query clients
+can retrieve such objects by leveraging both the flattened view <em>and</em> the hierarchical view of an object
+via their query expressions.</p>
 
-In fact, DataWave Query clients can retrieve such objects by leveraging both the flattened view and the
-hierarchical view of an object's fields within their query expressions. See the section on <a href="#support-for-hierarchical-data">hierarchical data</a>
+See the section on <a href="#support-for-hierarchical-data">hierarchical data</a>
 below for more information.
-</p>
-<hr />
+
 <h3>JEXL Unfielded Queries</h3>
 <p>
   JEXL is an expression language and not a text-query language per se, so JEXL doesn't natively support the notion of an 

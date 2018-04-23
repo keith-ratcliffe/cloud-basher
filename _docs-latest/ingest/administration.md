@@ -1,7 +1,8 @@
 ---
 title: DataWave Ingest Administration
 tags: [ingest, administration]
+devtags: [wip]
 toc: false
 ---
 
-## Coming soon, work in progress
+{% include devtag_wip.html content="Coming soon" %}

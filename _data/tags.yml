@@ -13,3 +13,5 @@ allowed-tags:
   - releases
   - development
   - troubleshooting
+  - todo
+  - wip

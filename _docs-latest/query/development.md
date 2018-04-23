@@ -1,13 +1,14 @@
 ---
 title: "DataWave Query API"
 tags: [getting_started, architecture, query]
+devtags: [wip]
 summary: This page describes the DataWave Query API and its associated web services
 ---
 
 ## Query Logic Components
 
-[ Coming soon, work in progress ]
+{% include devtag_wip.html content="Coming soon" %}
 
 ## Web Services
 
-[ Coming soon, work in progress ]
+{% include devtag_wip.html content="Coming soon" %}

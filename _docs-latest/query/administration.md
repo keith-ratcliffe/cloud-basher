@@ -1,7 +1,8 @@
 ---
 title: DataWave Query Administration
 tags: [query, administration]
+devtags: [wip]
 toc: false
 ---
 
-## Coming soon, work in progress
+{% include devtag_wip.html content="Coming soon" %}

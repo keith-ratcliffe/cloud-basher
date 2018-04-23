@@ -1,8 +1,11 @@
 ---
 title: "DataWave Ingest API"
 tags: [getting_started, architecture, ingest]
+devtags: [todo]
 summary: This page describes the primary components of DataWave Ingest API
 ---
+
+{% include devtag_todo.html content="Add concrete examples and guidance for the API constructs below" %}
 
 ### Input Formats & RecordReaders
 

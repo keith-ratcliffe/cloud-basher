@@ -27,7 +27,7 @@ However, this happens outside of the scope and purview of DataWave. Thus, DataWa
 in HDFS.
 
 Each distinct data type registered within DataWave Ingest will have a configured "base directory" within HDFS, where a
-dedicated *Flag Maker* process will monitor the arrival of new files for the given type. Based on the Flag Maker's governing
+dedicated *[Flag Maker](data-flow#the-flag-maker)* process will monitor the arrival of new files for the given type. Based on the Flag Maker's governing
 configuration, it will group some number of these files together and mark them as "flagged", which signals that they are
 ready to be submitted as input to a MapReduce job.
 
@@ -48,9 +48,9 @@ one another for the same CPU, memory, and network resources.
 ## Bulk Ingest
 
 In contrast, DataWave ingest jobs configured to operate in *bulk* mode use the *reduce* phase to write pre-sorted key/value
-pairs as *RFiles*, Accumulo's native file format, directly to the distributed file system. Accumulo's *bulk import* feature
-may then be employed to bring a large volume of *RFiles* online all at once, requiring very little overhead on the part of
-*Tablet Servers*.
+pairs as *RFiles*, Accumulo's native file format, directly to the distributed file system. DataWave's *[Bulk Loader](data-flow#bulk-loader)*
+is then employed to manage the bulk import into Accumulo, which can bring a large volume of *RFiles* online all at once
+and requiring very little overhead on the part of *Tablet Servers*.
 
 This may allow for greater overall ingest throughput and also give priority to user queries in terms of resource
 consumption, particularly when leveraging dedicated ingest nodes that are physically segregated from the primary Accumulo

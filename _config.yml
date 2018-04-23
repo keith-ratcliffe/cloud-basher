@@ -25,6 +25,10 @@ github_editme_path: NationalSecurityAgency/datawave/edit/gh-pages/
 # TODO: get google-analytics ID.
 google_analytics:
 
+# toggle display of TODO, WIP and any other dev-related tags/includes throughout the site,
+# which we don't typically want displayed except in dev mode
+display_devtags: true
+
 # these are the files and directories that jekyll will exclude from the build
 exclude:
   - .idea/

@@ -130,7 +130,7 @@ The example config, [myjson-ingest-config.xml][dw_blob_myjson_config], defines o
      <name>myjson.data.category.index</name>
      <value>NAME,ID,EMBEDDED_CAST_CHARACTER_NAME,...</value>
      <description>
-       List fields names that we want to have indexed in order to make them
+       List of field names that we want to have indexed in order to make them
        searchable via the query api.
      </description>
  </property>

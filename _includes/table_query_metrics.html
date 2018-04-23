@@ -1,5 +1,7 @@
 <table>
   <caption>Query Metrics Schema</caption>
+  <caption><b>Note</b>: The Data Type (DT) portion of all respective keys is denoted by the literal <b>querymetrics</b></caption>
+  <caption><b>Note</b>: The <b>YYYYMMDD</b> shard date for a query metrics object identifies the creation date of the query</caption>
   <thead><tr><th>NFN</th><th>FV</th></tr></thead>
   <tbody>
   {% assign tables = site.data.data-model.tables | where:"id","QMT" %}

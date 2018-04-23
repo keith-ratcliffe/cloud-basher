@@ -100,11 +100,7 @@ The layouts associated with the four query metrics tables are identical to those
 are intended to persist information associated with user queries exclusively. They can be leveraged by users to gain insight
 into their own queries, and by administrators to gain insight into active and historical queries. Since schema descriptions
 for the primary data tables apply here as well, we describe below only the specific NFN and FV components that are used to
-represent a query *Data Object*.
-
-**Note**: The *Data Type (DT)* portion of all respective keys is denoted by the literal **querymetrics**
-
-**Note**: The *YYYYMMDD* value that is created for the *Shard ID* partition identifies the creation date of the query
+represent a query metrics *Data Object*.
 
 {% include table_query_metrics.html %}
 
