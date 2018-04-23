@@ -1,8 +1,13 @@
 ---
 title: DataWave Ingest Configuration
 tags: [ingest, configuration]
+devtags: [todo]
 toc: true
 ---
+
+{% include devtag_todo.html content="Need a section on edge configuration" %}
+{% include devtag_todo.html content="Need a section on ingest-config.xml" %}
+{% include devtag_todo.html content="Need a section on all-config.xml" %}
 
 ## Data Type Configuration
 
