@@ -47,6 +47,23 @@ summary: This page gives an overview of DataWave's JEXL and Lucene query syntax 
     <li>Utility Functions<ul><li>between()</li><li>length()</li></ul></li>
 </ul>
 <hr />
+<h3>A Note About Field Names</h3>
+<p>
+Field names in DataWave are required to conform to JEXL naming conventions. That is, a field name must contain only alphanumeric
+characters and underscores, and the name must begin with either an alphabetic character or an underscore.
+</p>
+<p>By extension, this would seem to imply that a given data object in DataWave, which may consist of one or more field-name/value pairs, is strictly
+a flat data structure, given no apparent way to encode hierarchical structure within the field names themselves.
+</p>
+<p>While the DataWave Query API does 
+adhere to 'flat object' semantics in most respects, it does allow the natural hierarchical structure of fields to be retained during
+data ingest, if needed.
+
+In fact, DataWave Query clients can retrieve such objects by leveraging both the flattened view and the
+hierarchical view of an object's fields within their query expressions. See the section on <a href="#support-for-hierarchical-data">hierarchical data</a>
+below for more information.
+</p>
+<hr />
 <h3>JEXL Unfielded Queries</h3>
 <p>
   JEXL is an expression language and not a text-query language per se, so JEXL doesn't natively support the notion of an 
@@ -55,7 +72,7 @@ summary: This page gives an overview of DataWave's JEXL and Lucene query syntax 
 <p>
   As a convenience, DataWave does provide support for unfielded JEXL queries, at least for the subset of 
   <a href="development#query-logic-components">query logic</a> types that are designed to retrieve objects from the 
-  <a href="../getting-started/data-model#primary-data-table">primary data table</a>. However, to achieve this with JEXL, the user must add the 
+  <a href="../getting-started/data-model#primary-data-table">primary data table</a>. To achieve this with JEXL, the user must add the 
   internally-recognized pseudo field, <b>_ANYFIELD_</b>, to the query in order for it to pass syntax validation.
   See the examples below for usage.
 </p>
@@ -113,21 +130,21 @@ fuzzy, and the implicit operator is <b>AND</b> instead of <b>OR</b>.
 
 <h3>Support for Hierarchical Data</h3>
 
-DataWave also allows for queries that leverage the hierarchical context of nested data types such as JSON and XML,
-provided that the structure of the data is preserved during ingest by using the "grouping" notation that DataWave
-understands.
+DataWave also allows for queries that leverage the hierarchical context of structured data types,
+provided that the structure of the data is preserved during ingest. This requires that a special "grouping"
+notation be applied during ingest to any nested fields that are parsed.
 
-For example, consider the XML objects below...  
+For example, consider the XML objects below:
 
 **Data Object 1**
 ```xml
    <foo>
       <parent>
          <child>
-            <field>A</field>
+            <field1>A</field1>
          </child>
          <child>
-            <field>B</field>
+            <field2>B</field2>
          </child>
       </parent>
    </foo>
@@ -135,35 +152,42 @@ For example, consider the XML objects below...
 **Data Object 2**
 ```xml
    <bar>
-      <field>A</field>
-      <field>B</field>
+      <field1>A</field1>
+      <field2>B</field2>
    </bar>
 ```
 
-The field name/value pairs above may be stored logically in Accumulo as **{FIELD NAME}.{GROUPING CONTEXT} = {VALUE}**,
-where the grouping context preserves the fully-qualified path to the name/value pair and also conveys its relative position
-within the hierarchy. Thus, given the XML above, we could flatten the data objects and store the name/value pairs in
-Accumulo as follows...     
+The field name/value pairs above may be stored logically in Accumulo as follows:
 
-```bash
-  # Data Object 1...
-  FIELD.FOO_0.PARENT_0.CHILD_0.FIELD_0 = A
-  FIELD.FOO_0.PARENT_0.CHILD_1.FIELD_0 = B
+**{FIELD NAME}.{GROUPING CONTEXT} = {VALUE}**
+
+Here, the *grouping context* preserves the fully-qualified path of the name/value pair and also conveys its relative position
+within the hierarchy.
+
+Given the XML above, we could flatten the data objects during ingest by parsing the name/value pairs as follows:
+
+```
+  # Data Object 1 flattened, including grouping context
+  FIELD1.FOO_0.PARENT_0.CHILD_0.FIELD1_0 = A
+  FIELD2.FOO_0.PARENT_0.CHILD_1.FIELD2_0 = B
   -------------------------
-  # Data Object 2...
-  FIELD.BAR_0.FIELD_0 = A
-  FIELD.BAR_0.FIELD_1 = B
+  # Data Object 2 flattened, including grouping context
+  FIELD1.BAR_0.FIELD1_0 = A
+  FIELD2.BAR_0.FIELD2_0 = B
 ```
 
-As a result, the following simple query in DataWave could be used to return *both* objects above as two distinct search results...
+As a result, the objects are simplified, each having fields named 'FIELD1' and 'FIELD2. By default, the grouping
+context will be ignored by the query API. Therefore, the following simple query could be used to return *both* objects as
+distinct search results:
 
 <table>
     <tr><th>JEXL Query</th><th>Lucene Query</th></tr>
-    <tr class="highlight"><td>FIELD == 'A' &amp;&amp; FIELD == 'B'</td><td>FIELD:A FIELD:B</td></tr>
+    <tr class="highlight"><td>FIELD1 == 'A' &amp;&amp; FIELD2 == 'B'</td><td>FIELD1:A FIELD2:B</td></tr>
 </table>
 
-Both objects would be returned above. However, they clearly represent two different schemas, and we might not want both to appear in our search
-results. To disambiguate the two objects, we can use the following function...
+However, if the objects originated from distinct XML schemas having entirely different semantics for their respective
+fields, then we might not want both to appear in our search results. To disambiguate the two objects, we can use the
+following function:
 
 <table>
     <tr><th>JEXL Function</th><th>Lucene Function</th></tr>
@@ -171,25 +195,25 @@ results. To disambiguate the two objects, we can use the following function...
 </table>
 
 The INTEGER parameter denotes the level in the tree where the matching field name/value pairs must exist in order to
-constitute a match. Its values are defined as follows...
+constitute a match. Its values are defined as follows:
 
 * 0 : Fields are siblings / same parent element
 * 1 : Fields are cousins / same grandparent element
 * 2 : Fields are 2nd cousins / same great-grandparent element
 * And so on...
 
-For example, to retrieve *Data Object 1* above, we might use the following query...
+For example, to retrieve only *Data Object 1* above, we might use the following query:
 
 <table>
     <tr><th>JEXL Function</th><th>Lucene Function</th></tr>
-    <tr class="highlight"><td>FIELD == 'A' &amp;&amp; grouping:matchesInGroupLeft(FIELD, 'A', FIELD, 'B', 1)</td><td>FIELD:A AND #MATCHES_IN_GROUP_LEFT(FIELD, 'A', FIELD, 'B', 1)</td></tr>
+    <tr class="highlight"><td>FIELD1 == 'A' &amp;&amp; grouping:matchesInGroupLeft(FIELD1, 'A', FIELD2, 'B', 1)</td><td>FIELD1:A AND #MATCHES_IN_GROUP_LEFT(FIELD1, 'A', FIELD2, 'B', 1)</td></tr>
 </table>
 
-Likewise, to exclude *Data Object 1* and return only *Data Object 2*, we could do the following...
+Likewise, to return only *Data Object 2*, we could do the following:
 
 <table>
     <tr><th>JEXL Function</th><th>Lucene Function</th></tr>
-    <tr class="highlight"><td>FIELD == 'A' &amp;&amp; grouping:matchesInGroupLeft(FIELD, 'A', FIELD, 'B', 0)</td><td>FIELD:A AND #MATCHES_IN_GROUP_LEFT(FIELD, 'A', FIELD, 'B', 0)</td></tr>
+    <tr class="highlight"><td>FIELD1 == 'A' &amp;&amp; grouping:matchesInGroupLeft(FIELD1, 'A', FIELD2, 'B', 0)</td><td>FIELD1:A AND #MATCHES_IN_GROUP_LEFT(FIELD1, 'A', FIELD2, 'B', 0)</td></tr>
 </table>
 
 <h3>Custom Lucene Functions</h3>

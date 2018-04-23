@@ -20,6 +20,19 @@ Within this framework, distributed *map* tasks perform the work of transforming 
 key/value pairs][acc_data_model]. These are created in accordance with the DataWave data model and as prescribed by any
 user-supplied configuration.
 
+## Data Flow Overview
+
+Raw data will often require grooming or pre-processing of some sort before being passed along to DataWave to be ingested.
+However, this happens outside of the scope and purview of DataWave. Thus, DataWave's interaction with incoming data begins
+in HDFS.
+
+Each distinct data type registered within DataWave Ingest will have a configured "base directory" within HDFS, where a
+dedicated *Flag Maker* process will monitor the arrival of new files for the given type. Based on the Flag Maker's governing
+configuration, it will group some number of these files together and mark them as "flagged", which signals that they are
+ready to be submitted as input to a MapReduce job.
+
+{% include image.html url="/images/dw-data-flow-1.png" file="dw-data-flow-1.png" alt="Ingest Data Flow" %}
+
 ## Live Ingest
 
 A DataWave ingest job configured to operate in *live* mode is a *map*-only job in which the *mappers* use Accumulo

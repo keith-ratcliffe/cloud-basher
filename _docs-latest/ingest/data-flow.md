@@ -4,21 +4,7 @@ tags: [ingest]
 toc: true
 ---
 
-## Data Flow Overview
-
-Raw data will often require grooming or pre-processing of some sort before being passed along to DataWave to be ingested.
-However, this happens outside of the scope and purview of DataWave. Thus, DataWave's interaction with incoming data begins
-in HDFS.
-
-Each distinct data type registered within DataWave Ingest will have a configured "base directory" within HDFS, where a
-dedicated *Flag Maker* process will monitor the arrival of new files for the given type. Based on the Flag Maker's governing
-configuration, it will group some number of these files together and mark them as "flagged", which signals that they are
-ready to be submitted as input to a MapReduce job.
-
-If the given MapReduce job is configured for "live" ingest, then map tasks will write mutations directly into DataWave's
-Accumulo [tables](../getting-started/data-model) in the warehouse cluster. If the MapReduce job is configured for "bulk"
-ingest, then reduce tasks will write Accumulo RFiles as output, and a separate *Bulk Loader* process is then responsible
-for loading them into Accumulo.   
+## Data Flow Overview   
 
 {% include image.html url="/images/dw-data-flow-1.png" file="dw-data-flow-1.png" alt="Ingest Data Flow" %}
 
@@ -89,9 +75,19 @@ If a Flag Maker process happens to terminate abnormally for any reason...
 
 ## MapReduce Jobs
 
-### IngestJob.java
+### Ingest Job Overview
 
 {% include image.html url="/images/dw-ingest-job-1.png" file="dw-ingest-job-1.png" alt="Ingest Job Overview" %}
+
+## Bulk Loader
+
+### Overview
+
+{% include image.html url="/images/dw-bulk-loader-1.png" file="dw-bulk-loader-1.png" alt="Bulk Loader Overview" %}
+
+### Processing Workflow
+
+{% include image.html url="/images/dw-bulk-loader-2.png" file="dw-bulk-loader-2.png" alt="Bulk Loader Workflow" %}
 
 [dw_blob_flag_config_bulk]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/flag-maker-bulk.xml
 [dw_blob_flag_config_live]: https://github.com/NationalSecurityAgency/datawave/blob/master/warehouse/ingest-configuration/src/main/resources/config/flag-maker-live.xml
